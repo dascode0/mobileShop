@@ -5,7 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
+use App\Models\Cart;
+use App\Models\Wishlist;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -26,7 +29,19 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
 
         View::composer('layout.user', function ($view) {
-            $view->with('navigationCategories', Category::orderBy('name')->get());
+            $cartCount = 0;
+            $wishlistCount = 0;
+
+            if (Auth::check()) {
+                $cartCount = (int) Cart::where('user_id', Auth::id())->sum('quantity');
+                $wishlistCount = Wishlist::where('user_id', Auth::id())->count();
+            }
+
+            $view->with([
+                'navigationCategories' => Category::orderBy('name')->get(),
+                'cartCount' => $cartCount,
+                'wishlistCount' => $wishlistCount,
+            ]);
         });
     }
 }
