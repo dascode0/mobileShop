@@ -6,9 +6,9 @@
 @section('content')
     <div class="container-fluid main ps-lg-5 pe-lg-5">
         <div class="row p-2">
-            <div class="first_main col-lg-5 p-2"><a href="#">
+            <div class="first_main col-lg-5 p-2"><a href="{{ route('shop.index') }}">
                     <div class="first_main_img">
-                        <img src="img/slide01-1.jpeg" alt="" srcset="">
+                        <img src="{{ asset('img/slide01-1.jpeg') }}" alt="Big Saving Days Sale">
                     </div>
                     <div class="first_main_content">
                         <h1 class="fw-bold">Big Saving Days Sales</h1>
@@ -16,9 +16,9 @@
                         <button class="btn ">View Details</button>
                     </div>
                 </a></div>
-            <div class="second_main col-lg-3 p-2 d-none d-md-block"><a href="#">
+            <div class="second_main col-lg-3 p-2"><a href="{{ route('shop.index') }}">
                     <div class="second_main_img">
-                        <img src="img/slide01-2.jpeg" alt="" srcset="">
+                        <img src="{{ asset('img/slide01-2.jpeg') }}" alt="Ultra Portable products">
                     </div>
                     <div class="second_main_content">
                         <h1 class="fw-bold">Ultra Portable</h1>
@@ -28,8 +28,8 @@
                     <div class="shadow"></div>
                 </a></div>
             <div class="third_main col-lg-4 p-2">
-                <div class="third_top"><a href="">
-                        <img src="img/slide01-3.jpeg" alt="">
+                <div class="third_top"><a href="{{ route('shop.index') }}">
+                        <img src="{{ asset('img/slide01-3.jpeg') }}" alt="Handheld products">
                         <div class="third_top_content">
                             <h1 class="fw-bold">Handheld</h1>
                             <p class=" fs-5">USB 3 Rechargeable</p>
@@ -38,13 +38,12 @@
                         <div class="shadow"></div>
                     </a></div>
                 <div class="third_bottom"><a href="#">
-                        <img src="img/slide01-4.jpeg" alt="">
+                        <img src="{{ asset('img/slide01-4.jpeg') }}" alt="Gearbox offers">
                         <div class="third_bottom_content">
                             <h1 class="fw-bold">Gearbox</h1>
                             <p class=" fs-5">Upto 30% Discount </p>
                             <p class=" fs-5 mt-2">Shop Now <i class="fa-solid fa-arrow-right"></i></p>
                         </div>
-                        <div class="border"></div>
                     </a></div>
             </div>
         </div>
@@ -76,7 +75,7 @@
 
     <div class="category ps-lg-5 pe-lg-5 ps-2 pe-2">
         <h1 class="text-center pt-4 fw-bold fs-2">Popular Category</h1>
-        <div class="swiper mySwiper mt-5">
+        <div class="swiper category-swiper mt-5">
             <div class="swiper-wrapper">
                 @foreach($categories as $category)
                 <div class="swiper-slide swiper-slide1">
@@ -91,8 +90,8 @@
                 </div>
                 @endforeach
             </div>
-            <div class="swiper-button-next d-block d-xl-none"></div>
-            <div class="swiper-button-prev d-block d-xl-none"></div>
+            <div class="swiper-button-next category-next d-block d-xl-none"></div>
+            <div class="swiper-button-prev category-prev d-block d-xl-none"></div>
             <div class="swiper-pagination"></div>
         </div>
     </div>
@@ -101,7 +100,7 @@
 
     <div class="new_arrivals ps-lg-5 pe-lg-5 ps-2 pe-2">
         <h1 class="text-center pt-4 fw-bold fs-2">New Arrivals product</h1>
-        <div class="swiper mySwiper mt-5 swiper1">
+        <div class="swiper product-swiper mt-5 swiper1">
             <div class="swiper-wrapper">
                 @foreach($products as $product)
                 <div class="swiper-slide swiper-slide2" id="">
@@ -123,8 +122,8 @@
                 </div>
                 @endforeach
             </div>
-            <div class="swiper-button-next d-block d-xl-none"></div>
-            <div class="swiper-button-prev d-block d-xl-none"></div>
+            <div class="swiper-button-next product-next d-block d-xl-none"></div>
+            <div class="swiper-button-prev product-prev d-block d-xl-none"></div>
             <div class="swiper-pagination"></div>
         </div>
     </div>
@@ -134,7 +133,7 @@
     <div class="swiper mySwiper2 ">
         <div class="swiper-wrapper special_slider h-100">
             <div class="swiper-slide slide-1">
-                <div style="position:absolute; top:20%; left:8%; color:white; max-width:90%; text-align:left;">
+                <div class="feature-copy feature-copy-light">
                     <p class="fs-5; fw-1">New Camera. New Design.</p>
                     <h1 style=" margin-bottom:0.5rem;" class="fs-1; fw-bold">iPhone 15 Pro Max</h1>
                     <hr style="width:60px; border:2px solid #fff; margin:1rem 0;">
@@ -145,7 +144,7 @@
                 </div>
             </div>
             <div class="swiper-slide slide-2">
-                <div style="position:absolute; top:20%; left:8%; color:#004d40; max-width:90%; text-align:left;">
+                <div class="feature-copy feature-copy-dark">
                     <p style="margin-bottom:0.5rem; color:#15937e; " class="fs-5; fw-1">Experience Sound</p>
                     <h1 style="margin-bottom:0.5rem; color:#111;" class="fs-1; fw-bold">Freedom with AirPods</h1>
                     <hr style="width:60px; border:2px solid #15937e; margin:1rem 0;">
@@ -278,5 +277,3 @@
     </script>
 
 @endsection
-
-

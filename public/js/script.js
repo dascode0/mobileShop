@@ -1,14 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const swiper1 = new Swiper(".mySwiper", {
+    const carouselOptions = {
         slidesPerView: 5,
         spaceBetween: 20,
         loop: true,
         centeredSlides: false,
         watchOverflow: true,
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-        },
+        navigation: {},
         autoplay: {
             delay: 2000,
             disableOnInteraction: false,
@@ -35,6 +32,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 spaceBetween: 20
             },
         },
+    };
+
+    new Swiper(".category-swiper", {
+        ...carouselOptions,
+        navigation: {
+            nextEl: ".category-next",
+            prevEl: ".category-prev",
+        },
+    });
+
+    new Swiper(".product-swiper", {
+        ...carouselOptions,
+        navigation: {
+            nextEl: ".product-next",
+            prevEl: ".product-prev",
+        },
     });
 
     const swiper2 = new Swiper(".mySwiper2", {
@@ -43,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
             prevEl: '.custom-swiper2-prev',
         },
         loop: true,
+        rewind: true,
         slidesPerView: 1,
         spaceBetween: 0,
         effect: 'slide',
