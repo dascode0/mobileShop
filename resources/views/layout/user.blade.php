@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/png">
     <title>@yield('title')</title>
     <!-- bootstrap css link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,42 +29,97 @@
 
 <body>
     @if ($errors->any())
-    <script>
-        let errorMessages = "";
-        // @foreach ($errors->all() as $error)
-        // errorMessages += "{{ $error }}\n";
-        // @endforeach
-        // alert(errorMessages);
-    </script>
+        <script>
+            let errorMessages = "";
+            // @foreach ($errors->all() as $error)
+            // errorMessages += "{{ $error }}\n";
+            // @endforeach
+            // alert(errorMessages);
+        </script>
     @endif
     <!-- Customer navigation -->
     <header class="site-header">
         <nav class="navbar navbar-expand-xl navbar-dark top-nav" aria-label="Main navigation">
             <div class="container-fluid px-lg-4">
-                <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('img/logo-3.png') }}" alt="93Mobiles"></a>
-                <form class="nav-search d-none d-lg-flex" role="search"><label class="visually-hidden" for="searchBox">Search products</label><input class="form-control" type="search" placeholder="Search for Samsung" id="searchBox"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
-                <div class="nav-help d-none d-xxl-flex"><i class="ri-phone-fill"></i><span>Need help?<strong>08069856101</strong></span></div>
+                <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('img/logo-3.png') }}"
+                        alt="93Mobiles"></a>
+                <form class="nav-search d-none d-lg-flex" role="search"><label class="visually-hidden"
+                        for="searchBox">Search products</label><input class="form-control" type="search"
+                        placeholder="Search for Samsung" id="searchBox"><button class="btn" type="submit"
+                        aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+                <div class="nav-help d-none d-xxl-flex"><i class="ri-phone-fill"></i><span>Need
+                        help?<strong>08069856101</strong></span></div>
                 <ul class="header-actions mb-0">
                     @if (session('user_id'))
-                        <li><a href="{{ route('account') }}" aria-label="My account"><i class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Account</span></a></li>
+                        <li><a href="{{ route('account') }}" aria-label="My account"><i
+                                    class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Account</span></a>
+                        </li>
                     @else
-                        <li><button type="button" id="signup-btn" aria-label="Log in or register"><i class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Sign in</span></button></li>
+                        <li><button type="button" id="signup-btn" aria-label="Log in or register"><i
+                                    class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Sign
+                                    in</span></button></li>
                     @endif
-                    <li><a href="{{ route('wishlist.index') }}" aria-label="Favorites"><span class="action-icon"><i class="fa-solid fa-heart"></i>@if($wishlistCount > 0)<span class="nav-count">{{ $wishlistCount > 99 ? '99+' : $wishlistCount }}</span>@endif</span><span class="d-none d-lg-inline">Favorites</span></a></li>
-                    <li><a href="{{ route('cart.index') }}" aria-label="My cart"><span class="action-icon"><i class="ri-shopping-cart-fill"></i>@if($cartCount > 0)<span class="nav-count">{{ $cartCount > 99 ? '99+' : $cartCount }}</span>@endif</span><span class="d-none d-lg-inline">My cart</span></a></li>
+                    <li><a href="{{ route('wishlist.index') }}" aria-label="Favorites"><span class="action-icon"><i
+                                    class="fa-solid fa-heart"></i>
+                                @if ($wishlistCount > 0)
+                                    <span class="nav-count">{{ $wishlistCount > 99 ? '99+' : $wishlistCount }}</span>
+                                @endif
+                            </span>
+                            <span class="d-none d-lg-inline">Favorites</span></a></li>
+                    <li><a href="{{ route('cart.index') }}" aria-label="My cart"><span class="action-icon"><i
+                                    class="ri-shopping-cart-fill"></i>
+                                @if ($cartCount > 0)
+                                    <span class="nav-count">{{ $cartCount > 99 ? '99+' : $cartCount }}</span>
+                                @endif
+                            </span>
+                            <span class="d-none d-lg-inline">My cart</span></a></li>
                 </ul>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNavigation" aria-controls="primaryNavigation" aria-expanded="false" aria-label="Open menu"><span class="navbar-toggler-icon"></span></button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#primaryNavigation" aria-controls="primaryNavigation" aria-expanded="false"
+                    aria-label="Open menu"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse mobile-navigation" id="primaryNavigation">
-                    <form class="nav-search nav-search--mobile d-lg-none" role="search"><label class="visually-hidden" for="mobileSearch">Search products</label><input class="form-control" type="search" placeholder="Search products" id="mobileSearch"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
-                    <ul class="navbar-nav"><li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('shop.index') }}">Shop all products</a></li><li><a href="{{ route('about.page') }}">Our story</a></li><li><a href="{{ route('news.page') }}">Hot news</a></li><li><a href="{{ route('contact.page') }}">Contact us</a></li></ul>
+                    <form class="nav-search nav-search--mobile d-lg-none" role="search"><label class="visually-hidden"
+                            for="mobileSearch">Search products</label><input class="form-control" type="search"
+                            placeholder="Search products" id="mobileSearch"><button class="btn" type="submit"
+                            aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+                    <ul class="navbar-nav">
+                        <li><a href="{{ route('home') }}">Home</a></li>
+                        <li><a href="{{ route('shop.index') }}">Shop all products</a></li>
+                        <li><a href="{{ route('about.page') }}">Our story</a></li>
+                        <li><a href="{{ route('news.page') }}">Hot news</a></li>
+                        <li><a href="{{ route('contact.page') }}">Contact us</a></li>
+                    </ul>
                 </div>
             </div>
         </nav>
-        <nav class="bottom-nav d-none d-xl-block" aria-label="Product navigation"><div class="container-fluid px-4 d-flex align-items-center gap-3">
-            <div class="dropdown"><button class="department-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-menu-4-fill"></i> All departments</button><ul class="dropdown-menu department-menu">@forelse($navigationCategories as $category)<li><a class="dropdown-item" href="{{ route('shop.index', ['category' => $category->id]) }}">{{ $category->name }}</a></li>@empty<li><span class="dropdown-item-text">No categories available</span></li>@endforelse</ul></div>
-            <ul class="bottom-links mb-0"><li><a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li><li><a class="{{ request()->routeIs('shop.index') ? 'active' : '' }}" href="{{ route('shop.index') }}">Shop</a></li><li><a class="{{ request()->routeIs('about.page') ? 'active' : '' }}" href="{{ route('about.page') }}">Our Story</a></li><li><a class="{{ request()->routeIs('news.page') ? 'active' : '' }}" href="{{ route('news.page') }}">Hot News</a></li><li><a class="{{ request()->routeIs('contact.page') ? 'active' : '' }}" href="{{ route('contact.page') }}">Contacts</a></li></ul>
-            <span class="offer-pill ms-auto">FLAT10 · 10% OFF</span>
-        </div></nav>
+        <nav class="bottom-nav d-none d-xl-block" aria-label="Product navigation">
+            <div class="container-fluid px-4 d-flex align-items-center gap-3">
+                <div class="dropdown"><button class="department-button dropdown-toggle" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-menu-4-fill"></i> All
+                        departments</button>
+                    <ul class="dropdown-menu department-menu">
+                        @forelse($navigationCategories as $category)
+                            <li><a class="dropdown-item"
+                                    href="{{ route('shop.index', ['category' => $category->id]) }}">{{ $category->name }}</a>
+                        </li>@empty<li><span class="dropdown-item-text">No categories available</span></li>
+                        @endforelse
+                    </ul>
+                </div>
+                <ul class="bottom-links mb-0">
+                    <li><a class="{{ request()->routeIs('home') ? 'active' : '' }}"
+                            href="{{ route('home') }}">Home</a></li>
+                    <li><a class="{{ request()->routeIs('shop.index') ? 'active' : '' }}"
+                            href="{{ route('shop.index') }}">Shop</a></li>
+                    <li><a class="{{ request()->routeIs('about.page') ? 'active' : '' }}"
+                            href="{{ route('about.page') }}">Our Story</a></li>
+                    <li><a class="{{ request()->routeIs('news.page') ? 'active' : '' }}"
+                            href="{{ route('news.page') }}">Hot News</a></li>
+                    <li><a class="{{ request()->routeIs('contact.page') ? 'active' : '' }}"
+                            href="{{ route('contact.page') }}">Contacts</a></li>
+                </ul>
+                <span class="offer-pill ms-auto">FLAT10 · 10% OFF</span>
+            </div>
+        </nav>
     </header>
     <!-- Side Panel -->
     <div id="auth-panel" class="auth-panel">
