@@ -65,7 +65,8 @@ Route::get('home', [AuthenticationController::class, 'home'])->name('home');
 //cart routes
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/add/{product_id}', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/add/{product_id}', [CartController::class, 'quantityUpdate'])->name('cart.updateQuantity');
+Route::post('/cart/add/{product_id}', [CartController::class, 'addToCart'])->name('cart.add.post');
+Route::post('/cart/{product_id}/quantity', [CartController::class, 'quantityUpdate'])->name('cart.updateQuantity');
 Route::post('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/clear', [CartController::class, 'clearAll'])->name('cart.clearAll');
 
