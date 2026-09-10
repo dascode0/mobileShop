@@ -506,6 +506,97 @@
             height: 150px;
         }
     }
+
+    /* Keep the product page aligned with the storefront teal palette. */
+    .product-page {
+        background: linear-gradient(135deg, #f2fbfa 0%, #e0f2f1 100%);
+    }
+
+    .product-image-container,
+    .product-description-section,
+    .related-products {
+        border: 1px solid #d5ebe7;
+        box-shadow: 0 14px 32px rgba(0, 39, 38, 0.09);
+    }
+
+    .product-details-container {
+        background: #ffffff;
+        color: #25312e;
+        border: 1px solid #d5ebe7;
+        box-shadow: 0 14px 32px rgba(0, 39, 38, 0.12);
+    }
+
+    .product-summary {
+        background: #f2fbfa;
+        border-left-color: #00796b;
+    }
+
+    .product-title,
+    .description-title,
+    .section-title {
+        color: #002726;
+    }
+
+    .product-category,
+    .image-badge,
+    .feature-icon,
+    .highlight-icon {
+        background: linear-gradient(135deg, #00796b 0%, #005c53 100%);
+    }
+
+    .product-price,
+    .feature-value,
+    .related-current-price,
+    .related-product-category {
+        color: #00796b;
+    }
+
+    .btn-add-cart {
+        background: linear-gradient(135deg, #00796b 0%, #005c53 100%);
+    }
+
+    .btn-add-cart:hover {
+        background: linear-gradient(135deg, #005c53 0%, #00443d 100%);
+        box-shadow: 0 8px 25px rgba(0, 121, 107, 0.28);
+    }
+
+    .btn-buy-now {
+        background: #ffffff;
+        border-color: #00796b;
+        color: #00796b;
+    }
+
+    .btn-buy-now:hover {
+        background: #e0f2f1;
+        color: #005c53;
+        border-color: #005c53;
+    }
+
+    .product-summary h3 {
+        color: #002726 !important;
+    }
+
+    .product-summary p {
+        color: #52635f !important;
+    }
+
+    .description-title::after,
+    .section-title::after {
+        background: linear-gradient(135deg, #00796b 0%, #005c53 100%);
+    }
+
+    .swiper-slide2 {
+        border: 1px solid #e0eeec;
+        box-shadow: 0 6px 18px rgba(0, 39, 38, 0.08);
+    }
+
+    .swiper-slide2:hover {
+        box-shadow: 0 16px 30px rgba(0, 121, 107, 0.18);
+    }
+
+    .related-image-box {
+        background: #f2fbfa;
+    }
 </style>
 @endsection
 @section('content')

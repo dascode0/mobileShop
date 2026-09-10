@@ -247,7 +247,7 @@
             <div class="d-flex justify-content-between align-items-center flex-wrap">
                 <div>
                     <h1 class="mb-2"><i class="fa-solid fa-cart-shopping me-3"></i>Shopping Cart</h1>
-                    <p class="mb-0 opacity-75">{{$cartitems->count()}} item(s) in your cart</p>
+                    <p class="mb-0 opacity-75">{{$cartitems->pluck('product_id')->unique()->count()}} item(s) in your cart</p>
                 </div>
                 <a href="{{route('cart.clearAll')}}" class="clear-all-btn mt-2 mt-md-0">
                     <i class="fa-solid fa-trash me-2"></i>Clear All

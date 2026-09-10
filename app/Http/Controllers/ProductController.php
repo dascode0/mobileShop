@@ -116,11 +116,22 @@ class ProductController extends Controller
     public function show($id){
         
         $product=Product::findOrFail($id);
-        $likeproducts= Product::where('category_id', $product->category_id)
+        $sameCategoryProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $id)
             ->take(6)
             ->get();
-        $products = $likeproducts->shuffle(); // Shuffle the products to randomize the order
+        $products = $sameCategoryProducts;
+
+        if ($products->count() < 6) {
+            $fallbackProducts = Product::where('id', '!=', $id)
+                ->whereNotIn('id', $products->pluck('id'))
+                ->inRandomOrder()
+                ->take(6 - $products->count())
+                ->get();
+
+            $products = $products->concat($fallbackProducts);
+        }
+
         return view('product.show', compact('product', 'products'));   
     }
 }

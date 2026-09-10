@@ -33,7 +33,9 @@ class AppServiceProvider extends ServiceProvider
             $wishlistCount = 0;
 
             if (Auth::check()) {
-                $cartCount = (int) Cart::where('user_id', Auth::id())->sum('quantity');
+                $cartCount = (int) Cart::where('user_id', Auth::id())
+                    ->distinct()
+                    ->count('product_id');
                 $wishlistCount = Wishlist::where('user_id', Auth::id())->count();
             }
 
