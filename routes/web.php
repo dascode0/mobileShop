@@ -11,9 +11,8 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AddressController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthenticationController::class, 'home'])->name('home');
+
 Route::get('/navbar', function () {
     return view('navbar');
 })->name('navbar');
