@@ -36,116 +36,35 @@
         // alert(errorMessages);
     </script>
     @endif
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark ">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('img/logo-3.png') }}" alt="93Mobiles" height="50px">
-            </a>
-            <form class="d-none d-lg-flex flex-grow-1 mx-3">
-                <input class="form-control nav_search w-75" type="search" placeholder="Search for Samsung"
-                    aria-label="Search" id="searchBox">
-                <button class="btn btn-outline-light nav_search_btn" type="submit"><i
-                        class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
-            <div id="nav_contact" class="d-none d-xl-flex">
-                <i class="ri-phone-fill"></i>
-                <div id="nav_contact_content mt-2">
-                    <span>Need help? Call us:</span>
-                    <p class="fs-5">08069856101 </p>
-                </div>
-            </div>
-            <div id="nav-tag">
-                <ul class="nav-items me-lg-3">
-                    @if (@session('user_id'))
-                    <li class="nav-item"><a class="nav-link" href="{{ route('account') }}" id="">
-                            <div class="nav-box">
-                                <i class="fa-solid fa-user"></i>
-                                <span class="nav-tag-text d-none d-lg-flex">welcome</span>
-                            </div>
-                        </a></li>
+    <!-- Customer navigation -->
+    <header class="site-header">
+        <nav class="navbar navbar-expand-xl navbar-dark top-nav" aria-label="Main navigation">
+            <div class="container-fluid px-lg-4">
+                <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('img/logo-3.png') }}" alt="93Mobiles"></a>
+                <form class="nav-search d-none d-lg-flex" role="search"><label class="visually-hidden" for="searchBox">Search products</label><input class="form-control" type="search" placeholder="Search for Samsung" id="searchBox"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+                <div class="nav-help d-none d-xxl-flex"><i class="ri-phone-fill"></i><span>Need help?<strong>08069856101</strong></span></div>
+                <ul class="header-actions mb-0">
+                    @if (session('user_id'))
+                        <li><a href="{{ route('account') }}" aria-label="My account"><i class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Account</span></a></li>
                     @else
-                    <li class="nav-item"><a class="nav-link" href="javascript:void(0)" id="signup-btn">
-                            <div class="nav-box">
-                                <i class="fa-solid fa-user"></i>
-                                <span class="nav-tag-text d-none d-lg-flex">Sign up</span>
-                            </div>
-                        </a></li>
+                        <li><button type="button" id="signup-btn" aria-label="Log in or register"><i class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Sign in</span></button></li>
                     @endif
-                    <li class="nav-item"><a class="nav-link" href="#">
-                            <div class="nav-box">
-                                <i class="fa-solid fa-code-compare"></i>
-                                <span class="nav-tag-text d-none d-lg-flex">Comparison</span>
-                            </div>
-                        </a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('wishlist.index') }} ">
-                            <div class="nav-box">
-                                <i class="fa-solid fa-heart-circle-plus"></i>
-                                <span class="nav-tag-text d-none d-lg-flex">Favorites</span>
-                            </div>
-                        </a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('cart.index') }}">
-                            <div class="nav-box">
-                                <i class="ri-shopping-cart-fill"></i>
-                                <span class="nav-tag-text d-none d-lg-flex">My Cart</span>
-                            </div>
-                        </a></li>
+                    <li><a href="{{ route('wishlist.index') }}" aria-label="Favorites"><i class="fa-solid fa-heart"></i><span class="d-none d-lg-inline">Favorites</span></a></li>
+                    <li><a href="{{ route('cart.index') }}" aria-label="My cart"><i class="ri-shopping-cart-fill"></i><span class="d-none d-lg-inline">My cart</span></a></li>
                 </ul>
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <!-- <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Sign In</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Comparison</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Favorites</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">My Cart</a></li>
-                </ul>
-            </div> -->
-        </div>
-        <div class="container d-lg-none mt-2">
-            <form class="d-flex w-100">
-                <input class="form-control nav_search" type="search" placeholder="Search for Samsung"
-                    aria-label="Search">
-                <button class="btn btn-outline-light nav_search_btn" type="submit"><i
-                        class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
-        </div>
-    </nav>
-    <div id="bottom_nav" class="d-none d-xl-flex  ">
-        <div id="bottom_nav_first" class="d-flex align-items-center gap-1">
-            <div class="btn-group" id="category">
-                <button type="button" class="btn btn-secondary dropdown-toggle" id="category"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="ri-menu-4-fill"></i> all derpartment
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                    <li><a class="dropdown-item" href="#">Menu item</a></li>
-                    <li><a class="dropdown-item" href="#">Menu item</a></li>
-                    <li><a class="dropdown-item" href="#">Menu item</a></li>
-                </ul>
-            </div>
-            <ul class="d-flex justify-content-center align-items-center gap-4 nav2_item">
-                <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('shop.index', ['category' => 8]) }}">Mobiles</a></li>
-                <li><a href="{{ route('shop.index', ['category' => 9]) }}">Tablets</a></li>
-                <li><a href="{{ route('shop.index') }}">Shop</a></li>
-                <li><a href="{{ route('about.page') }}">Our Story</a></li>
-                <li><a href="{{ route('news.page') }}">Hot News</a></li>
-                <li><a href="{{ route('contact.page') }}">Contacts</a></li>
-            </ul>
-
-        </div>
-        <div id="bottom_nav_second">
-            <div id="outer">
-                FLAT10| 10% OFF
-                <div id="inner">
-                    FLAT10| 10% OFF
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNavigation" aria-controls="primaryNavigation" aria-expanded="false" aria-label="Open menu"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse mobile-navigation" id="primaryNavigation">
+                    <form class="nav-search nav-search--mobile d-lg-none" role="search"><label class="visually-hidden" for="mobileSearch">Search products</label><input class="form-control" type="search" placeholder="Search products" id="mobileSearch"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+                    <ul class="navbar-nav"><li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('shop.index') }}">Shop all products</a></li><li><a href="{{ route('about.page') }}">Our story</a></li><li><a href="{{ route('news.page') }}">Hot news</a></li><li><a href="{{ route('contact.page') }}">Contact us</a></li></ul>
                 </div>
             </div>
-        </div>
-    </div>
+        </nav>
+        <nav class="bottom-nav d-none d-xl-block" aria-label="Product navigation"><div class="container-fluid px-4 d-flex align-items-center gap-3">
+            <div class="dropdown"><button class="department-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-menu-4-fill"></i> All departments</button><ul class="dropdown-menu department-menu">@forelse($navigationCategories as $category)<li><a class="dropdown-item" href="{{ route('shop.index', ['category' => $category->id]) }}">{{ $category->name }}</a></li>@empty<li><span class="dropdown-item-text">No categories available</span></li>@endforelse</ul></div>
+            <ul class="bottom-links mb-0"><li><a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li><li><a class="{{ request()->routeIs('shop.index') ? 'active' : '' }}" href="{{ route('shop.index') }}">Shop</a></li><li><a class="{{ request()->routeIs('about.page') ? 'active' : '' }}" href="{{ route('about.page') }}">Our Story</a></li><li><a class="{{ request()->routeIs('news.page') ? 'active' : '' }}" href="{{ route('news.page') }}">Hot News</a></li><li><a class="{{ request()->routeIs('contact.page') ? 'active' : '' }}" href="{{ route('contact.page') }}">Contacts</a></li></ul>
+            <span class="offer-pill ms-auto">FLAT10 · 10% OFF</span>
+        </div></nav>
+    </header>
     <!-- Side Panel -->
     <div id="auth-panel" class="auth-panel">
         <div class="auth-header d-flex justify-content-between align-items-center p-3 ">
@@ -153,7 +72,7 @@
         </div>
         <h5 class="m-0 text-center mt-1 fw-bold ">Sign Up</h5>
         <div class="auth-tabs d-flex  row mt-3">
-            <div id="login-tab" class="col-6">Login</div>
+            <div id="login-tab" class="col-6 active">Login</div>
             <div id="register-tab" class="col-6">Register</div>
             <!-- <button class="btn btn-outline-primary" id="login-tab">Login</button>
             <button class="btn btn-outline-primary" id="register-tab">Register</button> -->
@@ -174,7 +93,7 @@
                 </form>
 
             </div>
-            <div id="register-form" style="display: none;">
+            <div id="register-form" hidden>
                 <form action="{{ route('registerSave') }}" method="post">
                     @csrf
                     <label for="name" class="form-label">Name *</label>
