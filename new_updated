@@ -1,0 +1,47 @@
+Fix important functionality first- Storage/images: add php artisan storage:link; use shared cloud storage or provide image files separately.
+- Database setup: document import/migration steps. Current feature test fails because the test database has no tables.
+- Protect admin routes with auth and an admin middleware. Currently several admin URLs can be accessed without consistent protection.
+- Change delete actions from GET routes to DELETE forms with confirmation. A URL visit should never delete a product/category.
+- Add proper success/error alerts; the login controller currently sends a success message using withErrors().
+- Add fallback images when a product/category image is missing.
+- Fix search: search inputs currently only change placeholder text—they do not search products.
+
+Complete shopping features- Product search by name, brand, and category.
+- Sorting: price low-to-high, high-to-low, newest, popular.
+- Better filters: category, price range, stock availability.
+- Product quantity controls before adding to cart.
+- Product stock checks before adding to cart and at checkout.
+- Order confirmation page with order number.
+- Customer order history and order-detail page.
+- Cancel order option before dispatch.
+
+Improve admin panel- Modern dashboard cards: total sales, orders, customers, low-stock products.
+- Order management: pending, confirmed, shipped, delivered, cancelled.
+- Product search, pagination, filters, and stock warnings.
+- Image preview before upload.
+- Category/product delete confirmation.
+- Admin-only authorization middleware.
+- Sales reports and basic charts.
+
+Improve data structure- Add brand, SKU, discount price, specifications, and multiple product images.
+- Add product reviews and ratings.
+- Store order status, payment status, delivery tracking number, and timestamps.
+- Use Laravel seeders/factories with sample products so every developer can run the project without importing a manual SQL file.
+
+UI pages still worth improving one by one- Shop page
+- Product details page
+- Cart page
+- Wishlist page
+- Checkout page
+- Account page
+- Admin dashboard
+- Product/category management pages
+- Footer links and contact details
+
+Production-quality additions- Email confirmation for placed orders.
+- Payment gateway integration, such as Razorpay for India.
+- Mobile-friendly invoice/download receipt.
+- SEO titles, meta descriptions, sitemap, and proper image alt text.
+- Loading, empty, and error states for every page.
+- Tests for login, cart, checkout, admin permissions, and product CRUD.
+- .env.example setup instructions and a cleaner README.
