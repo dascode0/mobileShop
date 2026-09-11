@@ -132,8 +132,14 @@ class ProductController extends Controller
             $products = $products->concat($fallbackProducts);
         }
 
-        $isFavorite = Auth::check()
-            && Auth::user()->wishlists()->where('product_id', $product->id)->exists();
+        $isFavorite = false;
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            if (method_exists($user, 'wishlists')) {
+                $isFavorite = $user->wishlists()->where('product_id', $product->id)->exists();
+            }
+        }
 
         return view('product.show', compact('product', 'products', 'isFavorite'));
     }
