@@ -6,6 +6,12 @@
         <h2>Category List</h2>
         <a href="{{route('category.add')}}" class="btn btn-primary">Add New Category</a>
     </div>
+    <form method="GET" action="{{ route('categories.index') }}" class="admin-live-search mb-3">
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="search" name="search" value="{{ $search }}" class="form-control" placeholder="Search categories" aria-label="Search categories">
+        </div>
+    </form>
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped align-middle">
@@ -23,7 +29,7 @@
                 @forelse ($categories as $category)
                     @php $index++; @endphp
                     <tr>
-                        <td>{{$index}}</td>
+                        <td>{{ $categories->firstItem() + $loop->index }}</td>
                         <td>{{$category->name}}</td>
                         <td>
                             @if($category->image)
@@ -34,7 +40,11 @@
                         </td>
                         <td>
                             <a href="{{route('category.edit',$category->id)}}" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="{{route('category.delete',$category->id)}}" class="btn btn-sm btn-danger">Delete</a>
+                            <form action="{{ route('category.delete', $category->id) }}" method="POST" class="d-inline admin-delete-form" data-confirm-message="This category and its image will be deleted.">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 @empty
@@ -47,6 +57,8 @@
             </tbody>
         </table>
     </div>
+    <div class="d-flex justify-content-center mt-4 admin-pagination">
+        {{ $categories->links() }}
+    </div>
 </div>
 @endsection
-

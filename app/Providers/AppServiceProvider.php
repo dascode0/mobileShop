@@ -37,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
                     ->distinct()
                     ->count('product_id');
                 $wishlistCount = Wishlist::where('user_id', Auth::id())->count();
+            } else {
+                $cartCount = count(session('guest_cart', []));
+                $wishlistCount = count(session('guest_wishlist', []));
             }
 
             $view->with([

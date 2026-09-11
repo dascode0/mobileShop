@@ -597,6 +597,422 @@
     .related-image-box {
         background: #f2fbfa;
     }
+
+    /* Refined storefront layout */
+    .product-page {
+        padding: 2.5rem 0 4rem;
+        background: #f6fbfa;
+    }
+
+    .product-page > .container > .row:first-child {
+        align-items: stretch;
+    }
+
+    .product-image-container,
+    .product-details-container {
+        height: 100%;
+        border-radius: 1rem;
+    }
+
+    .product-image-container {
+        min-height: 470px;
+        padding: 3.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+    }
+
+    .product-image-container::before {
+        content: '';
+        position: absolute;
+        inset: 1.25rem;
+        border: 1px solid #e4f0ed;
+        border-radius: .8rem;
+        pointer-events: none;
+    }
+
+    .product-main-image {
+        position: relative;
+        z-index: 1;
+        width: auto;
+        max-width: 82%;
+        max-height: 320px;
+        border-radius: .75rem;
+    }
+
+    .product-main-image:hover {
+        transform: scale(1.025);
+    }
+
+    .image-badge {
+        top: 1.75rem;
+        right: 1.75rem;
+        padding: .45rem .8rem;
+        border-radius: .45rem;
+        background: #e0f2f1;
+        color: #00695c;
+        font-size: .75rem;
+        letter-spacing: .03em;
+    }
+
+    .like-button {
+        top: 1.7rem;
+        left: 1.7rem;
+        z-index: 2;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid #d5e8e4 !important;
+        border-radius: 50%;
+        background: #fff !important;
+        color: #00796b !important;
+        box-shadow: 0 4px 12px rgba(0, 39, 38, .08);
+    }
+
+    .like-button.text-danger {
+        color: #dc3545 !important;
+    }
+
+    .like-button:disabled {
+        cursor: wait;
+        opacity: .7;
+    }
+
+    .product-details-container {
+        padding: 2.75rem;
+        background: #fff;
+    }
+
+    .product-details-container::before {
+        content: 'MOBILE COLLECTION';
+        display: block;
+        margin-bottom: 1rem;
+        color: #00796b;
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .16em;
+    }
+
+    .product-title {
+        max-width: 600px;
+        margin-bottom: .9rem;
+        color: #002726;
+        font-size: clamp(2rem, 3.4vw, 3rem);
+        letter-spacing: -.03em;
+    }
+
+    .product-category {
+        margin-bottom: 1.6rem;
+        padding: 0;
+        background: transparent;
+        color: #667873;
+        font-size: .78rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .product-price {
+        gap: .7rem;
+        margin-bottom: 1.25rem;
+        color: #00796b;
+        font-size: 2rem;
+    }
+
+    .original-price {
+        font-size: .95rem;
+        color: #8a9995;
+    }
+
+    .discount-badge {
+        padding: .3rem .5rem;
+        border-radius: .3rem;
+        background: #e0f2f1;
+        color: #00695c;
+        font-size: .7rem;
+    }
+
+    .stock-status {
+        margin-bottom: 1.5rem;
+        padding: .55rem .8rem;
+        border-radius: .4rem;
+        font-size: .82rem;
+    }
+
+    .action-buttons {
+        gap: .75rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .btn-add-cart {
+        min-width: 0;
+        padding: .85rem 1.1rem;
+        border-radius: .5rem;
+        font-size: .95rem;
+    }
+
+    .action-buttons .btn-add-cart {
+        width: 100%;
+    }
+
+    .product-image-footer {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+        max-width: 430px;
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e2efec;
+    }
+
+    .product-image-footer-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .4rem;
+        padding: 0 .5rem;
+        color: #52635f;
+        font-size: .7rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .product-image-footer-item + .product-image-footer-item {
+        border-left: 1px solid #e2efec;
+    }
+
+    .product-image-footer-item i {
+        color: #00796b;
+        font-size: .85rem;
+    }
+
+    .product-features {
+        margin-bottom: 1.25rem;
+        padding: .75rem 1rem;
+        border: 1px solid #e1eeeb;
+        border-radius: .7rem;
+        background: #f8fbfa;
+    }
+
+    .feature-item {
+        gap: .75rem;
+        padding: .65rem 0;
+    }
+
+    .feature-icon {
+        width: 2rem;
+        height: 2rem;
+        flex: 0 0 2rem;
+        font-size: .85rem;
+    }
+
+    .feature-text {
+        font-size: .86rem;
+    }
+
+    .feature-value {
+        font-size: .82rem;
+    }
+
+    .product-summary {
+        margin-bottom: 0;
+        padding: 1rem 1.1rem;
+        border: 1px solid #dcece8;
+        border-left: 3px solid #00796b;
+        border-radius: .65rem;
+    }
+
+    .product-description-section,
+    .related-products {
+        border-radius: 1rem;
+    }
+
+    .product-description-section {
+        margin-top: 1.5rem;
+        padding: 2.25rem;
+    }
+
+    .description-header {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .description-title,
+    .section-title {
+        margin-bottom: 0;
+        font-size: 1.55rem;
+        text-align: left;
+    }
+
+    .description-title::after,
+    .section-title::after {
+        left: 0;
+        transform: none;
+        width: 2.75rem;
+        height: 3px;
+    }
+
+    .description-text {
+        max-width: 850px;
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    .related-products {
+        position: relative;
+        margin-top: 1.5rem;
+        padding: 2rem 2.5rem 2.25rem;
+    }
+
+    .related-products .section-title {
+        margin-bottom: 1.25rem;
+    }
+
+    .swiper1 {
+        height: auto;
+        padding: .75rem .15rem 2.4rem;
+    }
+
+    .swiper-slide2 {
+        height: auto;
+        padding: .7rem;
+        border-radius: .75rem;
+        background: #fff;
+    }
+
+    .related-image-box {
+        height: 185px;
+        margin-bottom: .8rem;
+        border-radius: .55rem;
+    }
+
+    .related-product-category {
+        margin-bottom: .35rem;
+        font-size: .68rem;
+        letter-spacing: .08em;
+    }
+
+    .related-product-name {
+        min-height: 2.6em;
+        margin-bottom: .6rem;
+        font-size: .92rem;
+    }
+
+    .related-current-price {
+        font-size: 1rem;
+    }
+
+    .related-original-price {
+        font-size: .78rem;
+    }
+
+    .related-products .swiper-button-next,
+    .related-products .swiper-button-prev {
+        top: 48%;
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-top: 0;
+        border: 1px solid #cfe4df;
+        border-radius: 50%;
+        background: #fff;
+        color: #00796b;
+        box-shadow: 0 5px 14px rgba(0, 39, 38, .1);
+    }
+
+    .related-products .swiper-button-next {
+        right: .65rem;
+    }
+
+    .related-products .swiper-button-prev {
+        left: .65rem;
+    }
+
+    .related-products .swiper-button-next::after,
+    .related-products .swiper-button-prev::after {
+        font-size: .85rem;
+        font-weight: 900;
+    }
+
+    .related-products .swiper-button-next:hover,
+    .related-products .swiper-button-prev:hover {
+        background: #00796b;
+        color: #fff;
+    }
+
+    .related-products .swiper-pagination {
+        bottom: 0;
+    }
+
+    .related-products .swiper-pagination-bullet-active {
+        width: 1.25rem;
+        border-radius: .5rem;
+        background: #00796b;
+    }
+
+    @media (max-width: 767.98px) {
+        .product-page {
+            padding: 1.25rem 0 2.5rem;
+        }
+
+        .product-image-container {
+            min-height: 390px;
+            padding: 2rem;
+        }
+
+        .product-main-image {
+            max-width: 88%;
+            max-height: 245px;
+        }
+
+        .product-image-container::before {
+            inset: .9rem;
+        }
+
+        .product-details-container {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.8rem;
+        }
+
+        .product-price {
+            font-size: 1.7rem;
+        }
+
+        .action-buttons {
+            flex-direction: row;
+        }
+
+        .btn-add-cart {
+            flex: 1;
+        }
+
+        .product-image-footer {
+            margin-top: 1.5rem;
+        }
+
+        .product-image-footer-item {
+            flex-direction: column;
+            gap: .25rem;
+            font-size: .62rem;
+        }
+
+        .product-description-section,
+        .related-products {
+            padding: 1.5rem;
+        }
+
+        .related-products .swiper-button-next {
+            right: .15rem;
+        }
+
+        .related-products .swiper-button-prev {
+            left: .15rem;
+        }
+    }
 </style>
 @endsection
 @section('content')
@@ -607,14 +1023,22 @@
             <div class="col-lg-6">
                 <div class="product-image-container">
                     <!-- If user liked the product -->
-                    @if (Auth::check() && Auth::user()->wishlists->contains($product->id))
+                    @if ($isFavorite)
                     <button class="btn-like text-danger like-button" data-id="{{ $product->id }}" data-action="unlike"
-                        style="border: none; background:none;">
+                        data-add-url="{{ route('wishlist.add', ['productId' => $product->id]) }}"
+                        data-remove-url="{{ route('wishlist.remove', ['id' => $product->id]) }}"
+                        data-add-label="Add {{ $product->name }} to favorites"
+                        data-remove-label="Remove {{ $product->name }} from favorites"
+                        aria-label="Remove {{ $product->name }} from favorites" title="Remove from favorites">
                         <i class="bi bi-heart-fill fs-5"></i>
                     </button>
                     @else
                     <button class="btn-like text-dark like-button" data-id="{{ $product->id }}" data-action="like"
-                        style="border: none; background:none">
+                        data-add-url="{{ route('wishlist.add', ['productId' => $product->id]) }}"
+                        data-remove-url="{{ route('wishlist.remove', ['id' => $product->id]) }}"
+                        data-add-label="Add {{ $product->name }} to favorites"
+                        data-remove-label="Remove {{ $product->name }} from favorites"
+                        aria-label="Add {{ $product->name }} to favorites" title="Add to favorites">
                         <i class="bi bi-heart fs-5"></i>
                     </button>
                     @endif
@@ -623,6 +1047,20 @@
                     </div>
                     <img src="{{ asset('storage/' . ($product->image ?? 'default.jpg')) }}"
                         alt="{{ $product->name ?? 'Product Image' }}" class="product-main-image">
+                    <div class="product-image-footer" aria-label="Product service benefits">
+                        <div class="product-image-footer-item">
+                            <i class="fa-solid fa-truck-fast"></i>
+                            <span>Fast delivery</span>
+                        </div>
+                        <div class="product-image-footer-item">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>1 year warranty</span>
+                        </div>
+                        <div class="product-image-footer-item">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>7 day returns</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -661,14 +1099,14 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <a href="{{ route('cart.add', $product->id) }}" class="btn-add-cart">
-                            <i class="fa-solid fa-cart-plus"></i>
-                            Add to Cart
-                        </a>
-                        <button class="btn-buy-now">
-                            <i class="fa-solid fa-bolt"></i>
-                            Buy Now
-                        </button>
+                        @if($stock > 0)
+                            <a href="{{ route('cart.add', $product->id) }}" class="btn-add-cart">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                Add to Cart
+                            </a>
+                        @else
+                            <span class="text-danger small">This product is not available right now. Please check again later.</span>
+                        @endif
                     </div>
 
                     <!-- Product Features -->
@@ -774,34 +1212,66 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        // Like button click event
-        $('.btn-like').click(function() {
-            let button = $(this); // the clicked button
-            let productId = button.data('id'); // product ID
-            let action = button.data('action'); // like or unlike
+        function favoriteNotification(icon, title) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: icon,
+                title: title,
+                showConfirmButton: false,
+                timer: 2400,
+                timerProgressBar: true
+            });
+        }
 
-            $.post(`/` + action + `-product/` + productId, function(response) {
+        function updateWishlistCount(count) {
+            const counter = $('#wishlist-count');
+            const numericCount = Number(count);
+
+            if (!counter.length || !Number.isFinite(numericCount)) {
+                return;
+            }
+
+            counter.text(numericCount > 99 ? '99+' : numericCount);
+            counter.prop('hidden', numericCount === 0);
+        }
+
+        $('.btn-like').on('click', function() {
+            const button = $(this);
+            const action = button.data('action');
+            const addFavoriteUrl = button.data('add-url');
+            const removeFavoriteUrl = button.data('remove-url');
+            const endpoint = action === 'like' ? addFavoriteUrl : removeFavoriteUrl;
+            const addedLabel = button.data('remove-label');
+            const removedLabel = button.data('add-label');
+
+            button.prop('disabled', true);
+
+            $.post(endpoint, function(response) {
                 if (response.status === 'success') {
-                    // Change button style instantly
-                    if (action === 'like') {
-                        button.html('<i class="bi bi-heart-fill fs-5"></i>');
-                        button.removeClass('text-dark').addClass('text-danger');
-                        button.data('action', 'unlike');
-                    } else {
-                        button.html('<i class="bi bi-heart fs-5"></i>');
-                        button.removeClass('text-danger').addClass('text-dark');
-                        button.data('action', 'like');
-                    }
-                } else if (response.status === 'info') {
-                    // Product already in wishlist
-                    console.log(response.message);
+                    const isFavorite = action === 'like';
+                    button.html(isFavorite
+                        ? '<i class="bi bi-heart-fill fs-5"></i>'
+                        : '<i class="bi bi-heart fs-5"></i>');
+                    button.toggleClass('text-danger', isFavorite).toggleClass('text-dark', !isFavorite);
+                    button.data('action', isFavorite ? 'unlike' : 'like');
+                    button.attr('aria-label', isFavorite ? addedLabel : removedLabel);
+                    button.attr('title', isFavorite ? 'Remove from favorites' : 'Add to favorites');
+                    updateWishlistCount(response.wishlistCount);
+                    favoriteNotification('success', response.message);
+                } else {
+                    favoriteNotification('info', response.message);
                 }
             }).fail(function(xhr) {
                 if (xhr.status === 401) {
-                    alert('Please log in to manage your wishlist.');
+                    favoriteNotification('info', 'Please log in to save this product to favorites.');
+                } else if (xhr.status === 404) {
+                    favoriteNotification('error', 'This product is no longer available.');
                 } else {
-                    alert('Something went wrong. Please try again.');
+                    favoriteNotification('error', 'Unable to update favorites. Please try again.');
                 }
+            }).always(function() {
+                button.prop('disabled', false);
             });
         });
 
@@ -810,8 +1280,8 @@
 
     // Swiper initialization
     var swiper = new Swiper(".mySwiper", {
-        slidesPerView: 5,
-        spaceBetween: 40,
+        slidesPerView: 4,
+        spaceBetween: 18,
         loop: true,
         navigation: {
             nextEl: ".swiper-button-next",
@@ -822,14 +1292,21 @@
             disableOnInteraction: false,
         },
         breakpoints: {
-            768: {
+            992: {
                 slidesPerView: 4,
+                spaceBetween: 18,
+            },
+            768: {
+                slidesPerView: 3,
+                spaceBetween: 16,
             },
             576: {
                 slidesPerView: 2,
+                spaceBetween: 12,
             },
             320: {
-                slidesPerView: 1,
+                slidesPerView: 1.15,
+                spaceBetween: 12,
             }
         }
     });
