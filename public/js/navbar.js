@@ -26,9 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
         registerTab.classList.toggle('active', !isLogin);
     };
 
+    const initialTab = window.authPanelTab === 'register' ? 'register' : 'login';
+
     signupButton?.addEventListener('click', () => {
         authPanel.classList.add('show');
-        selectTab('login');
+        selectTab(initialTab);
         document.body.style.overflow = 'hidden';
     });
 
@@ -45,5 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (authPanel?.classList.contains('show') && !authPanel.contains(event.target) && !signupButton?.contains(event.target)) closeAuthPanel();
     });
 
-    selectTab('login');
+    selectTab(initialTab);
+    if (window.authPanelOpen) {
+        authPanel?.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
 });

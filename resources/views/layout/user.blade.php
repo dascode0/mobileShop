@@ -27,14 +27,6 @@
 </head>
 
 <body>
-    @if ($errors->any())
-    <script>
-        let errorMessages = "";
-        // @foreach ($errors->all() as $error)
-        // errorMessages += "{{ $error }}\n";
-        // @endforeach
-    </script>
-    @endif
     <!-- Customer navigation -->
     <header class="site-header">
         <nav class="navbar navbar-expand-xl navbar-dark top-nav" aria-label="Main navigation">
@@ -78,7 +70,7 @@
         <div class="auth-header d-flex justify-content-between align-items-center p-3 ">
             <button class="btn-close" id="close-panel"></button>
         </div>
-        <h5 class="m-0 text-center mt-1 fw-bold ">Sign Up</h5>
+        <h5 class="m-0 text-center mt-1 fw-bold ">Account access</h5>
         <div class="auth-tabs d-flex  row mt-3">
             <div id="login-tab" class="col-6 active">Login</div>
             <div id="register-tab" class="col-6">Register</div>
@@ -86,15 +78,20 @@
             <button class="btn btn-outline-primary" id="register-tab">Register</button> -->
         </div>
         <div class="auth-content p-4">
+            @if ($errors->any())
+                <div class="alert alert-danger py-2 small" role="alert">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i>{{ $errors->first() }}
+                </div>
+            @endif
             <div id="login-form">
                 <form action="{{ route('loginSave') }}" method="post">
                     @csrf
-                    <label for="email" class="form-label">Email *</label>
-                    <input type="text" placeholder="" class="form-control mb-3" name="email" id="email"
-                        required>
+                    <label for="login-email" class="form-label">Email *</label>
+                    <input type="email" placeholder="" class="form-control mb-3" name="email" id="login-email"
+                        value="{{ old('email') }}" required>
 
-                    <label for="pass" class="form-label">Password *</label>
-                    <input type="password" placeholder="" class="form-control mb-3" id="pass" name="password"
+                    <label for="login-password" class="form-label">Password *</label>
+                    <input type="password" placeholder="" class="form-control mb-3" id="login-password" name="password"
                         required>
 
                     <button type="submit" class="btn btn-dark w-100">Login</button>
@@ -105,16 +102,16 @@
                 <form action="{{ route('registerSave') }}" method="post">
                     @csrf
                     <label for="name" class="form-label">Name *</label>
-                    <input type="text" placeholder="" class="form-control mb-3" id="name" name="name"
-                        required>
-                    <label for="email" class="form-label">Email *</label>
-                    <input type="email" placeholder="" class="form-control mb-3" id="email" name="email"
-                        required>
-                    <label for="pass" class="form-label">Password *</label>
-                    <input type="password" placeholder="" class="form-control mb-3" id="pass" name="password"
+                    <input type="text" placeholder="" class="form-control mb-3" id="register-name" name="name"
+                        value="{{ old('name') }}" required>
+                    <label for="register-email" class="form-label">Email *</label>
+                    <input type="email" placeholder="" class="form-control mb-3" id="register-email" name="email"
+                        value="{{ old('email') }}" required>
+                    <label for="register-password" class="form-label">Password *</label>
+                    <input type="password" placeholder="" class="form-control mb-3" id="register-password" name="password"
                         required>
                     <label for="password_confirmation" class="form-label">Confirm Password *</label>
-                    <input type="password" class="form-control mb-3" id="password_confirmation"
+                    <input type="password" class="form-control mb-3" id="register-password_confirmation"
                         name="password_confirmation" required>
                     <button class="btn btn-dark w-100">Register</button>
                 </form>
@@ -181,6 +178,10 @@
     <!-- bootstrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- external js -->
+    <script>
+        window.authPanelTab = @json(session('auth_panel', 'login'));
+        window.authPanelOpen = @json($errors->any() || session()->has('auth_panel'));
+    </script>
     <script type="text/javascript" src="{{ asset('js/navbar.js') }}"></script>
     @yield('scripts')
 </body>

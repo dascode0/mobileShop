@@ -13,17 +13,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Cart;
 
 
 class AuthenticationController extends Controller
 {
     public function register(Request $request)
     {
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:4|confirmed',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('auth_panel', 'register');
+        }
+
+        $data = $validator->validated();
 
         unset($data['password_confirmation']);
         $data['password'] = Hash::make($data['password']);
@@ -33,14 +43,26 @@ class AuthenticationController extends Controller
         $request->session()->put('user_id', $user->id);
         $request->session()->put('user_name', $user->name);
         $request->session()->put('user_email', $user->email);
+        $this->mergeGuestData($request, $user);
 
         if ($user) {
-            return redirect()->route('home');
+            return redirect()->route('home')->with('success', 'Registration successful. Welcome to our store!');
         }
         return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.']);
     }
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('auth_panel', 'login');
+        }
+
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -48,10 +70,37 @@ class AuthenticationController extends Controller
             $request->session()->put('user_id', $user->id);
             $request->session()->put('user_name', $user->name);
             $request->session()->put('user_email', $user->email);
-            return redirect()->route('home')->withErrors(['error' => 'thank you for login!.']);
+            $this->mergeGuestData($request, $user);
+            return redirect()->route('home')->with('success', 'Login successful. Welcome back!');
         }
 
-        return redirect()->back()->withErrors(['error' => 'Invalid credentials. Please try again.']);
+        return redirect()->back()
+            ->withErrors(['error' => 'Invalid credentials. Please try again.'])
+            ->withInput()
+            ->with('auth_panel', 'login');
+    }
+
+    private function mergeGuestData(Request $request, User $user): void
+    {
+        $guestCart = $request->session()->pull('guest_cart', []);
+        foreach ($guestCart as $productId => $quantity) {
+            if (!Product::whereKey($productId)->exists()) {
+                continue;
+            }
+            $cartItem = Cart::firstOrNew([
+                'user_id' => $user->id,
+                'product_id' => (int) $productId,
+            ]);
+            $cartItem->quantity = (int) ($cartItem->quantity ?? 0) + max(1, (int) $quantity);
+            $cartItem->save();
+        }
+
+        $guestWishlist = $request->session()->pull('guest_wishlist', []);
+        $validProductIds = Product::whereIn('id', array_map('intval', $guestWishlist))->pluck('id')->all();
+        if ($validProductIds) {
+            $existingIds = $user->wishlists()->whereIn('product_id', $validProductIds)->pluck('products.id')->all();
+            $user->wishlists()->syncWithoutDetaching(array_diff($validProductIds, $existingIds));
+        }
     }
     public function account(Request $request)
     {

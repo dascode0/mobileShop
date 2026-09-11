@@ -25,7 +25,11 @@ class CartController extends Controller
     public function addToCart(Request $request){
         $userId = Auth::id();
         if (!$userId) {
-            return redirect()->route('home')->with('error', 'You need to be logged in to add items to your cart.');
+            $product = Product::findOrFail($request->product_id);
+            $guestCart = $request->session()->get('guest_cart', []);
+            $guestCart[$product->id] = (int) ($guestCart[$product->id] ?? 0) + 1;
+            $request->session()->put('guest_cart', $guestCart);
+            return redirect()->route('home')->with('success', 'Product saved in your cart. Login to complete your cart.');
         }
 
        $existingCartItem=Cart::where('user_id', $userId)->where('product_id',$request->product_id)->first();

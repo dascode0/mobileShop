@@ -24,7 +24,17 @@ class WishlistController extends Controller
     public function wishProduct($id)
     {
         if (!Auth::check()) {
-            return response()->json(['status' => 'unauthenticated', 'message' => 'Please log in to save favorites.'], 401);
+            Product::findOrFail($id);
+            $guestWishlist = session()->get('guest_wishlist', []);
+            if (!in_array((int) $id, array_map('intval', $guestWishlist), true)) {
+                $guestWishlist[] = (int) $id;
+                session()->put('guest_wishlist', $guestWishlist);
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Product saved to favorites. Login to keep it in your account.',
+                'wishlistCount' => count($guestWishlist),
+            ]);
         }
 
         $product = Product::findOrFail($id);
@@ -47,7 +57,16 @@ class WishlistController extends Controller
     public function unwishProduct($id)
     {
         if (!Auth::check()) {
-            return response()->json(['status' => 'unauthenticated', 'message' => 'Please log in to manage favorites.'], 401);
+            $guestWishlist = array_values(array_filter(
+                session()->get('guest_wishlist', []),
+                fn ($productId) => (int) $productId !== (int) $id
+            ));
+            session()->put('guest_wishlist', $guestWishlist);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Product removed from your favorites.',
+                'wishlistCount' => count($guestWishlist),
+            ]);
         }
 
         $product = Product::findOrFail($id);
