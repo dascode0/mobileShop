@@ -94,6 +94,7 @@ Route::get('/cart/clear', [CartController::class, 'clearAll'])->name('cart.clear
 
 // shop route
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/search/products', [ShopController::class, 'searchProducts'])->name('products.search');
 
 // about route
 Route::get('/about', [PageController::class, 'about'])->name('about.page');
