@@ -4,6 +4,12 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">All Users</h2>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if($errors->any())
+        <div class="alert alert-danger">{{ $errors->first() }}</div>
+    @endif
     <div class="table-responsive">
         <table class="table table-hover align-middle text-center shadow-sm rounded">
             <thead class="table-dark">
@@ -12,6 +18,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,16 +29,26 @@
                         <td>{{ $index}}</td>
                         <td class="text-capitalize">{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        @if ($user->is_admin == 1)
-                            <td>Admin</td>
-                        @else
-                            <td>User</td>
-                        @endif
+                        <td>User</td>
+                        <td>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fa-solid fa-eye me-1"></i>View
+                                </a>
+                                <form action="{{ route('users.delete', $user) }}" method="POST" onsubmit="return confirm('Delete this user and all related data?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fa-solid fa-trash me-1"></i>Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                         
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-muted">No users found.</td>
+                        <td colspan="5" class="text-muted">No users found.</td>
                     </tr>
                 @endforelse
             </tbody>

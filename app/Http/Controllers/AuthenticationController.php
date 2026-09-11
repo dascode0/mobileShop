@@ -168,7 +168,7 @@ class AuthenticationController extends Controller
     // dashboard method start to the admin panel
     public function dashboard()
     {
-        $usercount = User::count();
+        $usercount = User::where('is_admin', false)->count();
         $ordercount = Order::count();
         $productcount = Product::count();
         $revenue = (float) Order::whereNotIn('status', ['cancelled'])->sum('total');
@@ -191,29 +191,6 @@ class AuthenticationController extends Controller
 
         return redirect()->back()->withErrors(['error' => 'Invalid credentials. Please try again.']);
     }
-    public function adminRegister(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:4|confirmed',
-        ]);
-        $data['is_admin'] = true; // Assuming you want to set a flag for admin users
-
-        unset($data['password_confirmation']);
-        $data['password'] = Hash::make($data['password']);
-
-        $user = User::create($data);
-        Auth::login($user);
-        $request->session()->put('user_id', $user->id);
-        $request->session()->put('user_name', $user->name);
-        $request->session()->put('user_email', $user->email);
-
-        if ($user) {
-            return redirect()->route('dashboard');
-        }
-        return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.']);
-    }
     public function adminLogout(Request $request)
     {
         $user = Auth::user();
@@ -229,10 +206,33 @@ class AuthenticationController extends Controller
     {
         $user = Auth::user();
         if ($user) {
-            $users = User::paginate(5);
+            $users = User::where('is_admin', false)->latest('id')->paginate(5);
             return view('users', ['users' => $users]);
         }
         return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to view this page.']);
+    }
+
+    public function showUser(User $user)
+    {
+        abort_if($user->is_admin, 404);
+
+        $user->load([
+            'addresses',
+            'orders' => fn ($query) => $query->with(['address', 'orderItems.product'])->latest(),
+        ]);
+
+        return view('users.show', compact('user'));
+    }
+
+    public function deleteUser(User $user)
+    {
+        if ($user->is_admin) {
+            return redirect()->route('users')->withErrors(['error' => 'Admin accounts cannot be deleted here.']);
+        }
+
+        $user->delete();
+
+        return redirect()->route('users')->with('success', 'User deleted successfully.');
     }
 
     // home page

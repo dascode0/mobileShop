@@ -37,7 +37,6 @@ Route::get('/admin', function () {
 })->name('admin.login');
 
 Route::post('admin_login', [AuthenticationController::class, 'adminLogin'])->name('admin.login.save');
-Route::post('admin_register', [AuthenticationController::class, 'adminRegister'])->name('admin.register.save');
 Route::get('admin_logout', [AuthenticationController::class, 'adminLogout'])->name('admin.logout');
 
 // Admin-only Routes ***************************************************************************
@@ -45,6 +44,8 @@ Route::get('admin_logout', [AuthenticationController::class, 'adminLogout'])->na
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AuthenticationController::class, 'dashboard'])->name('dashboard');
     Route::get('/users', [AuthenticationController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [AuthenticationController::class, 'showUser'])->name('users.show');
+    Route::delete('/users/{user}', [AuthenticationController::class, 'deleteUser'])->name('users.delete');
 
     // Category Routes
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
