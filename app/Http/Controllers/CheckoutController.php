@@ -25,6 +25,15 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'Your cart is empty');
         }
 
+        foreach ($cartItems as $cartItem) {
+            if (!$cartItem->product || $cartItem->quantity > $cartItem->product->stock) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Some cart items no longer have enough stock. Please update your cart.',
+                ], 422);
+            }
+        }
+
         // Get user's addresses
         $addresses = Address::where('user_id', Auth::id())->get();
         
@@ -132,12 +141,17 @@ class CheckoutController extends Controller
 
             // Create order items
             foreach ($cartItems as $cartItem) {
+                $product = $cartItem->product()->lockForUpdate()->first();
+                if (!$product || $cartItem->quantity > $product->stock) {
+                    throw new \RuntimeException('Insufficient stock for ' . ($product->name ?? 'a cart item'));
+                }
+                $product->decrement('stock', $cartItem->quantity);
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $cartItem->product_id,
                     'quantity' => $cartItem->quantity,
-                    'price' => $cartItem->product->price,
-                    'total' => $cartItem->product->price * $cartItem->quantity
+                    'price' => $product->price,
+                    'total' => $product->price * $cartItem->quantity
                 ]);
             }
 

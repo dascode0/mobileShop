@@ -107,10 +107,14 @@
                                         <p>₹{{ number_format($product->price) }}</p>
                                         <a href="{{ route('product.show', $product->id) }}" class="btn btn-outline-dark w-100 mb-2">View details</a>
 
-                                        <form method="POST" action="{{ route('cart.add.post', $product->id) }}">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success w-100">Add to cart</button>
-                                        </form>
+                                        @if(($product->stock ?? 0) > 0)
+                                            <form method="POST" action="{{ route('cart.add.post', $product->id) }}">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success w-100">Add to cart</button>
+                                            </form>
+                                        @else
+                                            <p class="small text-danger mb-0" role="status">This product is not available right now. Please check again later.</p>
+                                        @endif
                                     </div>
                                 </article>
                             </div>

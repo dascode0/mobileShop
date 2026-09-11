@@ -274,7 +274,7 @@
                                 <input type="hidden" name="id" value="{{$item->id}}">
                                 <div class="quantity-controls">
                                     <label class="small text-muted mb-0">Qty:</label>
-                                    <input type="number" name="quantity" class="quantity-input" value="{{$item->quantity}}" min="1">
+                                    <input type="number" name="quantity" class="quantity-input" value="{{$item->quantity}}" min="1" max="{{$item->product->stock}}" aria-label="Quantity for {{$item->product->name}}">
                                     <button type="submit" class="btn-update">
                                         <i class="fa-solid fa-check"></i>
                                     </button>

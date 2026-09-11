@@ -1099,10 +1099,14 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
-                        <a href="{{ route('cart.add', $product->id) }}" class="btn-add-cart">
-                            <i class="fa-solid fa-cart-plus"></i>
-                            Add to Cart
-                        </a>
+                        @if($stock > 0)
+                            <a href="{{ route('cart.add', $product->id) }}" class="btn-add-cart">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                Add to Cart
+                            </a>
+                        @else
+                            <span class="text-danger small">This product is not available right now. Please check again later.</span>
+                        @endif
                     </div>
 
                     <!-- Product Features -->

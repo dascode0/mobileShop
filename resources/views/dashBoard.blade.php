@@ -41,6 +41,18 @@
                 </div>
             </div>
 
+            @if($lowStockProducts->isNotEmpty())
+            <div class="alert alert-warning border-0 shadow-sm mt-3" role="alert">
+                <h5 class="alert-heading"><i class="fa-solid fa-triangle-exclamation me-2"></i>Stock notification</h5>
+                <p class="mb-2">The following products need attention:</p>
+                <ul class="mb-0">
+                    @foreach($lowStockProducts as $product)
+                        <li><strong>{{ $product->name }}</strong> — {{ $product->stock > 0 ? $product->stock . ' left' : 'out of stock' }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
             <div class="mt-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="mb-0">Recent Orders</h4>

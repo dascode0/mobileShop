@@ -222,8 +222,9 @@ class AuthenticationController extends Controller
         $productcount = Product::count();
         $revenue = (float) Order::whereNotIn('status', ['cancelled'])->sum('total');
         $recentOrders = Order::with('user')->latest()->take(5)->get();
+        $lowStockProducts = Product::where('stock', '<=', 3)->latest('stock')->get();
 
-        return view('dashboard', compact('usercount', 'ordercount', 'productcount', 'revenue', 'recentOrders'));
+        return view('dashboard', compact('usercount', 'ordercount', 'productcount', 'revenue', 'recentOrders', 'lowStockProducts'));
     }
 
     public function dashboardOrders()
@@ -231,6 +232,7 @@ class AuthenticationController extends Controller
         return response()->json([
             'order_count' => Order::count(),
             'revenue' => (float) Order::whereNotIn('status', ['cancelled'])->sum('total'),
+            'low_stock_products' => Product::where('stock', '<=', 3)->get(['id', 'name', 'stock']),
             'orders' => Order::with('user')->latest()->take(5)->get()->map(function ($order) {
                 return [
                     'number' => $order->order_number,

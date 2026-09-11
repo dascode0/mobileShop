@@ -357,11 +357,17 @@
                                         title="View Product">
                                         <i class="fa-solid fa-eye"></i>
                                     </a>
+                                    @if(($product->stock ?? 0) > 0)
                                     <a href="{{ route('cart.add', $product->id) }}"
                                         class="btn-action btn-cart"
                                         title="Add to Cart">
                                         <i class="fa-solid fa-cart-plus"></i>
                                     </a>
+                                    @else
+                                    <button type="button" class="btn-action btn-cart" title="Out of stock" onclick="Swal.fire({toast:true,position:'top-end',icon:'info',title:'This product is not available right now. Please check again later.',showConfirmButton:false,timer:2400})">
+                                        <i class="fa-solid fa-cart-plus"></i>
+                                    </button>
+                                    @endif
                                     <button class="btn-action btn-remove btn-remove-wishlist"
                                         data-id="{{ $product->id }}"
                                         title="Remove from Wishlist">
