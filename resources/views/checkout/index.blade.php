@@ -53,8 +53,8 @@
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div class="user-details">
-                                        <h4>Welcome back, {{ Auth::user()->name }}!</h4>
-                                        <p class="text-secondery">{{ Auth::user()->email }}</p>
+                                        <h4 style="color: #00796b;">Welcome back, <span style="font-weight: bold; color: #00796b;">{{ Auth::user()->name }}</span>!</h4>
+                                        <p class="text-secondary">{{ Auth::user()->email }}</p>
                                     </div>
                                     <button class="btn-continue" onclick="nextStep(2)">
                                         <i class="fa-solid fa-arrow-right me-2"></i>Continue

@@ -892,6 +892,8 @@
     .order-summary-sidebar {
         position: static;
         margin-top: 2rem;
+        padding: 10px;
+        border-radius: 12px;
     }
 }
 
@@ -969,4 +971,231 @@
         justify-content: center;
         gap: 2rem;
     }
+}
+
+/* Use the storefront teal palette consistently on checkout. */
+.checkout-container {
+    background: #f4f8f7;
+    color: #17211f;
+}
+
+.checkout-header {
+    background: linear-gradient(135deg, #00796b 0%, #005f56 100%);
+    color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 121, 107, 0.2);
+}
+
+.progress-steps,
+.step-card,
+.order-summary-sidebar,
+.order-summary {
+    background: #ffffff;
+    border-color: #c8dfda;
+    box-shadow: 0 10px 30px rgba(0, 39, 38, 0.08);
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.step-circle {
+    background: #e0f2f1;
+    border-color: #9fcac3;
+    color: #00796b;
+}
+
+.step.active .step-circle {
+    background: #00796b;
+    border-color: #00796b;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(0, 121, 107, 0.25);
+}
+
+.step-label,
+.form-label,
+.address-text,
+.user-details p,
+.item-details p,
+.quantity,
+.calculation-row,
+.security-badge {
+    color: #50615e;
+}
+
+.step.active .step-label,
+.step-header h3,
+.existing-addresses h5,
+.address-header h6,
+.address-form h5,
+.order-items h5,
+.delivery-summary h5,
+.payment-method-section h5,
+.summary-title,
+.security-badge i,
+.price,
+.summary-price,
+.total-row {
+    color: #00796b;
+}
+
+.step-line {
+    background: #b8d3ce;
+}
+
+.step.active + .step-line {
+    background: linear-gradient(90deg, #00796b 0%, #b8d3ce 100%);
+}
+
+.step-header {
+    border-bottom-color: #00796b;
+}
+
+.auth-card,
+.user-info,
+.address-card,
+.address-form,
+.order-item,
+.address-summary,
+.summary-item {
+    background: #f8fbfa;
+    border-color: #c8dfda;
+}
+
+.address-card:hover,
+.address-card.selected,
+.payment-option:hover,
+.payment-option.selected {
+    border-color: #00796b;
+}
+
+.address-card.selected {
+    background: #eaf6f4;
+}
+
+.form-control {
+    background: #ffffff;
+    border-color: #b8d3ce;
+    color: #17211f;
+}
+
+.form-control:focus {
+    background: #ffffff;
+    border-color: #00796b;
+    color: #17211f;
+    box-shadow: 0 0 15px rgba(0, 121, 107, 0.18);
+}
+
+.btn-primary,
+.btn-continue {
+    background: linear-gradient(135deg, #00796b 0%, #005f56 100%);
+    color: #ffffff;
+}
+
+.btn-primary:hover,
+.btn-continue:hover {
+    background: linear-gradient(135deg, #005f56 0%, #004d45 100%);
+    box-shadow: 0 8px 25px rgba(0, 121, 107, 0.25);
+}
+
+.btn-back,
+.btn-edit,
+.btn-delete {
+    border-color: #9fcac3;
+    color: #50615e;
+}
+
+.btn-back:hover,
+.btn-edit:hover {
+    border-color: #00796b;
+    color: #00796b;
+}
+
+.btn-add-address {
+    border-color: #00796b;
+    color: #00796b;
+}
+
+.btn-add-address:hover {
+    background: #e0f2f1;
+}
+
+.user-avatar,
+.payment-icon {
+    background: linear-gradient(135deg, #00796b 0%, #005f56 100%);
+    color: #ffffff;
+}
+
+.payment-option {
+    background: #f8fbfa;
+    border-color: #c8dfda;
+}
+
+.payment-option input[type="radio"],
+.address-radio {
+    accent-color: #00796b;
+}
+
+.payment-option input[type="radio"]:checked + label {
+    color: #00796b;
+}
+
+.payment-option.selected {
+    background: #eaf6f4;
+    box-shadow: 0 8px 25px rgba(0, 121, 107, 0.14);
+}
+
+.payment-option.active {
+    border-color: #00796b;
+    background: #eaf6f4;
+    box-shadow: 0 8px 25px rgba(0, 121, 107, 0.14);
+}
+
+.payment-option.selected::after,
+.payment-option.active::after {
+    content: '\f00c';
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    width: 22px;
+    height: 22px;
+    place-items: center;
+    border-radius: 50%;
+    background: #00796b;
+    color: #ffffff;
+    font-family: 'Font Awesome 6 Free';
+    font-size: 0.7rem;
+    font-weight: 900;
+}
+
+.payment-label {
+    padding: 14px 42px 14px 14px;
+}
+
+.payment-content {
+    gap: 12px;
+}
+
+.payment-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+}
+
+.payment-details h6 {
+    color: #17211f;
+    margin-bottom: 3px;
+    font-size: 0.98rem;
+}
+
+.payment-details p {
+    color: #50615e;
+    font-size: 0.82rem;
+}
+
+.btn-place-order {
+    background: linear-gradient(135deg, #00796b 0%, #005f56 100%);
+}
+
+.btn-place-order:hover {
+    background: linear-gradient(135deg, #005f56 0%, #004d45 100%);
+    box-shadow: 0 10px 30px rgba(0, 121, 107, 0.22);
 }
