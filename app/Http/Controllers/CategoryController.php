@@ -10,14 +10,16 @@ use App\Models\Category;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
          $user = Auth::user();
         if (!$user) {
             return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to view this page.']);
         }
-        $categories = Category::latest('id')->paginate(10);
-        return view('categories.index', compact('categories'));
+        $search = trim((string) $request->query('search', ''));
+        $categories = Category::when($search !== '', fn ($query) => $query->where('name', 'like', '%' . $search . '%'))
+            ->latest('id')->paginate(10)->withQueryString();
+        return view('categories.index', compact('categories', 'search'));
     }
     public function catagory_add(){
         $user=Auth::user();
@@ -65,7 +67,7 @@ class CategoryController extends Controller
         }
         
         $category->save();
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
     public function delete($id){
         $user=Auth::user();

@@ -4,6 +4,12 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">All Users</h2>
+    <form method="GET" action="{{ route('users') }}" class="admin-live-search mb-3">
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="search" name="search" value="{{ $search }}" class="form-control" placeholder="Search users by name or email" aria-label="Search users">
+        </div>
+    </form>
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -26,7 +32,7 @@
                 @forelse ($users as $user)
                     <tr>
                         @php $index++; @endphp
-                        <td>{{ $index}}</td>
+                        <td>{{ $users->firstItem() + $loop->index }}</td>
                         <td class="text-capitalize">{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>User</td>

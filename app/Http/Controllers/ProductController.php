@@ -14,14 +14,20 @@ class ProductController extends Controller
     // Add your methods for handling product-related actions here
     // For example, you might have methods like index, create, store, edit, update, destroy, etc.
     
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         if (!$user) {
             return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to view this page.']);
         }
-        $products = Product::latest('id')->paginate(10);
-        return view('product.index',compact('products')); // Assuming you have a view for listing products
+        $search = trim((string) $request->query('search', ''));
+        $products = Product::with('category')
+            ->when($search !== '', fn ($query) => $query->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            }))
+            ->latest('id')->paginate(10)->withQueryString();
+        return view('product.index', compact('products', 'search'));
     }
 
     public function create()
@@ -97,7 +103,7 @@ class ProductController extends Controller
         }
 
         $product->save();
-        return redirect()->route('products.index');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy($id)

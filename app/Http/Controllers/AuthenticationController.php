@@ -313,12 +313,20 @@ class AuthenticationController extends Controller
             return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to perform this action.']);
         }
     }
-    public function users()
+    public function users(Request $request)
     {
         $user = Auth::user();
         if ($user) {
-            $users = User::where('is_admin', false)->latest('id')->paginate(5);
-            return view('users', ['users' => $users]);
+            $search = trim((string) $request->query('search', ''));
+            $users = User::where('is_admin', false)
+                ->when($search !== '', fn ($query) => $query->where(function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%');
+                }))
+                ->latest('id')
+                ->paginate(5)
+                ->withQueryString();
+            return view('users', compact('users', 'search'));
         }
         return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to view this page.']);
     }

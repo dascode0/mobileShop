@@ -45,6 +45,9 @@
         .admin-pagination .page-link { border: 0; border-radius: 8px; color: #00796b; }
         .admin-pagination .page-item.active .page-link { background: #00796b; color: #fff; }
         .admin-pagination .page-link:hover { background: #e0f2f1; color: #005f56; }
+        .admin-live-search .input-group-text { background: #e0f2f1; color: #00796b; border-color: #b2dfdb; }
+        .admin-live-search .form-control { border-color: #b2dfdb; }
+        .admin-live-search .form-control:focus { border-color: #00796b; box-shadow: 0 0 0 .2rem rgba(0, 121, 107, .15); }
         @media (max-width: 768px) {
             .sidebar {
                 position: absolute;
@@ -174,6 +177,16 @@
                 });
 
                 if (result.isConfirmed) form.submit();
+            });
+        });
+
+        document.querySelectorAll('.admin-live-search input[name="search"]').forEach(function (input) {
+            let timer;
+            input.addEventListener('input', function () {
+                window.clearTimeout(timer);
+                timer = window.setTimeout(function () {
+                    input.form.submit();
+                }, 350);
             });
         });
 

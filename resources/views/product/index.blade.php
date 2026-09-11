@@ -6,6 +6,12 @@
         <h2>All Products</h2>
         <a href="{{route('product.add')}}" class="btn btn-primary">Add New Product</a>
     </div>
+    <form method="GET" action="{{ route('products.index') }}" class="admin-live-search mb-3">
+        <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input type="search" name="search" value="{{ $search }}" class="form-control" placeholder="Search products by name or description" aria-label="Search products">
+        </div>
+    </form>
 
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
