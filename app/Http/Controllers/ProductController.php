@@ -20,7 +20,7 @@ class ProductController extends Controller
         if (!$user) {
             return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to view this page.']);
         }
-        $products = Product::all(); // Fetch all products
+        $products = Product::latest('id')->paginate(10);
         return view('product.index',compact('products')); // Assuming you have a view for listing products
     }
 

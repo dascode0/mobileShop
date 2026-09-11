@@ -249,7 +249,7 @@
                     <h1 class="mb-2"><i class="fa-solid fa-cart-shopping me-3"></i>Shopping Cart</h1>
                     <p class="mb-0 opacity-75">{{$cartitems->pluck('product_id')->unique()->count()}} item(s) in your cart</p>
                 </div>
-                <a href="{{route('cart.clearAll')}}" class="clear-all-btn mt-2 mt-md-0">
+                <a href="#" onclick="confirmCartAction('{{ route('cart.clearAll') }}', 'Clear all items from your cart?'); return false;" class="clear-all-btn mt-2 mt-md-0">
                     <i class="fa-solid fa-trash me-2"></i>Clear All
                 </a>
             </div>
@@ -283,7 +283,7 @@
                         </div>
                         <div class="col-md-2 col-3 text-center mt-3 mt-md-0">
                             <p class="product-price mb-2">₹{{number_format($item->product->price * $item->quantity)}}</p>
-                            <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="d-inline cart-delete-form">
                                 @csrf
                                 <button class="btn-remove">
                                     <i class="fa-solid fa-trash"></i>
@@ -359,6 +359,33 @@
 
 @section('scripts')
 <script>
+async function confirmCartAction(url, message) {
+    const result = await Swal.fire({
+        icon: 'warning',
+        title: 'Are you sure?',
+        text: message,
+        showCancelButton: true,
+        confirmButtonText: 'Yes, continue',
+        confirmButtonColor: '#dc3545'
+    });
+    if (result.isConfirmed) window.location.href = url;
+}
+
+document.querySelectorAll('.cart-delete-form').forEach(function (form) {
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const result = await Swal.fire({
+            icon: 'warning',
+            title: 'Remove this item?',
+            text: 'This item will be removed from your cart.',
+            showCancelButton: true,
+            confirmButtonText: 'Remove',
+            confirmButtonColor: '#dc3545'
+        });
+        if (result.isConfirmed) form.submit();
+    });
+});
+
     @if(session('success'))
     Swal.fire({
         toast: true,

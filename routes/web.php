@@ -43,6 +43,10 @@ Route::get('admin_logout', [AuthenticationController::class, 'adminLogout'])->na
 // Everything in this group requires a logged-in user with is_admin = true.
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AuthenticationController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard/orders', [AuthenticationController::class, 'dashboardOrders'])->name('dashboard.orders');
+    Route::get('/admin/settings', [AuthenticationController::class, 'adminSettings'])->name('admin.settings');
+    Route::put('/admin/settings', [AuthenticationController::class, 'updateAdminSettings'])->name('admin.settings.update');
+    Route::delete('/admin/settings/profile-image', [AuthenticationController::class, 'deleteAdminProfileImage'])->name('admin.settings.profile-image.delete');
     Route::get('/users', [AuthenticationController::class, 'users'])->name('users');
     Route::get('/users/{user}', [AuthenticationController::class, 'showUser'])->name('users.show');
     Route::delete('/users/{user}', [AuthenticationController::class, 'deleteUser'])->name('users.delete');
@@ -53,7 +57,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('category-save', [CategoryController::class, 'create'])->name('category.save');
     Route::get('/category-edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
     Route::post('/category-update/{id}', [CategoryController::class, 'update'])->name('category.update');
-    Route::get('/category-delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::delete('/category-delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 
     // Product management Routes (product-show below stays public for customers)
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
@@ -61,7 +65,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/product-save', [ProductController::class, 'store'])->name('product.save');
     Route::get('product-update/{id}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('product-update/{id}', [ProductController::class, 'update'])->name('product.update');
-    Route::get('product-delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+    Route::delete('product-delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
 
     // Order management Routes
     Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');

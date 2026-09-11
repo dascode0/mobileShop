@@ -8,19 +8,22 @@
     <link rel="stylesheet" href="{{ asset('css/admin-login.css') }}">
 </head>
 <body>
-    @if ($errors->any())
-        <script>
-            let errorMessages = "";
-            @foreach ($errors->all() as $error)
-                errorMessages += "{{ $error }}\n";
-            @endforeach
-            alert(errorMessages);
-        </script>
-    @endif
     <main class="wrapper">
       <div class="brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
       <h1>Admin Login</h1>
       <p class="subtitle">Sign in to manage your store</p>
+      @if ($errors->any())
+        <div class="login-notification error" role="alert">
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span>{{ $errors->first() }}</span>
+        </div>
+      @endif
+      @if (session('success'))
+        <div class="login-notification success" role="status">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>{{ session('success') }}</span>
+        </div>
+      @endif
       <form action="{{ route('admin.login.save') }}" method="post">
             @csrf
             <div class="field">

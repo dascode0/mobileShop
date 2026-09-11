@@ -16,7 +16,7 @@
                         <div class="card text-white bg-success mb-3">
                             <div class="card-body">
                                 <h5 class="card-title">Orders</h5>
-                                <p class="card-text fs-3 mb-0">{{ $ordercount }}</p>
+                                <p class="card-text fs-3 mb-0" id="dashboard-order-count">{{ $ordercount }}</p>
                             </div>
                         </div>
                     </a>
@@ -35,7 +35,7 @@
                     <div class="card text-white bg-danger mb-3">
                         <div class="card-body">
                             <h5 class="card-title">Revenue</h5>
-                            <p class="card-text fs-3 mb-0">₹{{ number_format($revenue, 2) }}</p>
+                            <p class="card-text fs-3 mb-0" id="dashboard-revenue">₹{{ number_format($revenue, 2) }}</p>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="dashboard-recent-orders">
                             @forelse($recentOrders as $order)
                             <tr>
                                 <td>{{ $order->order_number }}</td>
@@ -77,4 +77,23 @@
                 </div>
             </div>
         </div>
+        <div class="text-muted small mt-2"><i class="fa-solid fa-rotate me-1"></i>Orders update automatically.</div>
+        <script>
+            const dashboardOrdersUrl = @json(route('dashboard.orders'));
+            async function refreshDashboardOrders() {
+                try {
+                    const response = await fetch(dashboardOrdersUrl, { headers: { 'Accept': 'application/json' } });
+                    if (!response.ok) return;
+                    const data = await response.json();
+                    document.getElementById('dashboard-order-count').textContent = data.order_count;
+                    document.getElementById('dashboard-revenue').textContent = '₹' + Number(data.revenue).toLocaleString('en-IN', { minimumFractionDigits: 2 });
+                    document.getElementById('dashboard-recent-orders').innerHTML = data.orders.length
+                        ? data.orders.map(order => `<tr><td>${order.number}</td><td>${order.customer}</td><td>${order.date}</td><td>₹${order.total}</td><td><span class="badge text-bg-secondary text-capitalize">${order.status}</span></td></tr>`).join('')
+                        : '<tr><td colspan="5" class="text-center text-muted py-4">No orders placed yet.</td></tr>';
+                } catch (error) {
+                    console.error('Dashboard refresh failed', error);
+                }
+            }
+            setInterval(refreshDashboardOrders, 15000);
+        </script>
 @endsection

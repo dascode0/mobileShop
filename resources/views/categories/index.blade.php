@@ -23,7 +23,7 @@
                 @forelse ($categories as $category)
                     @php $index++; @endphp
                     <tr>
-                        <td>{{$index}}</td>
+                        <td>{{ $categories->firstItem() + $loop->index }}</td>
                         <td>{{$category->name}}</td>
                         <td>
                             @if($category->image)
@@ -34,7 +34,11 @@
                         </td>
                         <td>
                             <a href="{{route('category.edit',$category->id)}}" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="{{route('category.delete',$category->id)}}" class="btn btn-sm btn-danger">Delete</a>
+                            <form action="{{ route('category.delete', $category->id) }}" method="POST" class="d-inline admin-delete-form" data-confirm-message="This category and its image will be deleted.">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 @empty
@@ -47,6 +51,8 @@
             </tbody>
         </table>
     </div>
+    <div class="d-flex justify-content-center mt-4 admin-pagination">
+        {{ $categories->links() }}
+    </div>
 </div>
 @endsection
-

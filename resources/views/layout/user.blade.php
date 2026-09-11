@@ -33,7 +33,6 @@
         // @foreach ($errors->all() as $error)
         // errorMessages += "{{ $error }}\n";
         // @endforeach
-        // alert(errorMessages);
     </script>
     @endif
     <!-- Customer navigation -->

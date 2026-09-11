@@ -16,7 +16,7 @@ class CategoryController extends Controller
         if (!$user) {
             return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to view this page.']);
         }
-        $categories = Category::all();
+        $categories = Category::latest('id')->paginate(10);
         return view('categories.index', compact('categories'));
     }
     public function catagory_add(){

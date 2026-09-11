@@ -95,9 +95,13 @@ document.querySelectorAll('.order-status-select').forEach(function (select) {
                 body: JSON.stringify({ status })
             });
             const result = await response.json();
-            if (!result.success) alert(result.message || 'Failed to update order status');
+            if (!result.success) {
+                Swal.fire({ icon: 'error', title: 'Update failed', text: result.message || 'Failed to update order status' });
+            } else {
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Order status updated', showConfirmButton: false, timer: 2200 });
+            }
         } catch (err) {
-            alert('Network error while updating order status');
+            Swal.fire({ icon: 'error', title: 'Network error', text: 'Could not update order status.' });
         }
     });
 });

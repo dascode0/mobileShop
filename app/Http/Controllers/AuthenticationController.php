@@ -177,6 +177,66 @@ class AuthenticationController extends Controller
         return view('dashboard', compact('usercount', 'ordercount', 'productcount', 'revenue', 'recentOrders'));
     }
 
+    public function dashboardOrders()
+    {
+        return response()->json([
+            'order_count' => Order::count(),
+            'revenue' => (float) Order::whereNotIn('status', ['cancelled'])->sum('total'),
+            'orders' => Order::with('user')->latest()->take(5)->get()->map(function ($order) {
+                return [
+                    'number' => $order->order_number,
+                    'customer' => $order->user->name ?? 'Deleted user',
+                    'date' => $order->created_at->utc()->timezone('Asia/Kolkata')->format('d M Y'),
+                    'total' => number_format($order->total, 2),
+                    'status' => $order->status,
+                ];
+            }),
+        ]);
+    }
+
+    public function adminSettings()
+    {
+        return view('admin.settings', ['admin' => Auth::user()]);
+    }
+
+    public function updateAdminSettings(Request $request)
+    {
+        $admin = Auth::user();
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $admin->id,
+            'password' => 'nullable|string|min:4',
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $admin->name = $data['name'];
+        $admin->email = $data['email'];
+        if (!empty($data['password'])) {
+            $admin->password = Hash::make($data['password']);
+        }
+        if ($request->hasFile('profile_image')) {
+            if ($admin->profile_image && Storage::disk('public')->exists($admin->profile_image)) {
+                Storage::disk('public')->delete($admin->profile_image);
+            }
+            $admin->profile_image = $request->file('profile_image')->store('profile-images', 'public');
+        }
+        $admin->save();
+        $request->session()->put(['user_name' => $admin->name, 'user_email' => $admin->email]);
+
+        return redirect()->route('admin.settings')->with('success', 'Admin profile updated successfully.');
+    }
+
+    public function deleteAdminProfileImage(Request $request)
+    {
+        $admin = Auth::user();
+        if ($admin->profile_image && Storage::disk('public')->exists($admin->profile_image)) {
+            Storage::disk('public')->delete($admin->profile_image);
+        }
+        $admin->profile_image = null;
+        $admin->save();
+        return redirect()->route('admin.settings')->with('success', 'Profile photo removed.');
+    }
+
     public function adminLogin(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -186,7 +246,7 @@ class AuthenticationController extends Controller
             $request->session()->put('user_id', $user->id);
             $request->session()->put('user_name', $user->name);
             $request->session()->put('user_email', $user->email);
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard')->with('success', 'Admin login successful. Welcome back!');
         }
 
         return redirect()->back()->withErrors(['error' => 'Invalid credentials. Please try again.']);

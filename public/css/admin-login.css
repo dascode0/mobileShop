@@ -56,6 +56,29 @@ h1 {
   text-align: center;
 }
 
+.login-notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 22px;
+  padding: 12px 14px;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.login-notification.error {
+  border-color: #f1b8b5;
+  background: #fff2f1;
+  color: #a52822;
+}
+
+.login-notification.success {
+  border-color: #a8d8ce;
+  background: #eefaf7;
+  color: #00695c;
+}
+
 .field {
   margin-top: 22px;
 }

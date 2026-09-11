@@ -582,7 +582,16 @@ function resetFormToAddMode() {
 }
 
 async function deleteAddress(addressId) {
-    if (confirm('Are you sure you want to delete this address?')) {
+    const confirmation = await Swal.fire({
+        icon: 'warning',
+        title: 'Delete this address?',
+        text: 'This action cannot be undone.',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        confirmButtonColor: '#dc3545'
+    });
+
+    if (confirmation.isConfirmed) {
         try {
             const response = await fetch(`/addresses/${addressId}`, {
                 method: 'DELETE',

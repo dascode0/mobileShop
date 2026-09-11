@@ -405,7 +405,15 @@
             let productId = button.data('id');
             let row = button.closest('tr');
 
-            if (confirm('Are you sure you want to remove this item from your wishlist?')) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Remove wishlist item?',
+                text: 'This item will be removed from your wishlist.',
+                showCancelButton: true,
+                confirmButtonText: 'Remove',
+                confirmButtonColor: '#dc3545'
+            }).then(function(result) {
+                if (!result.isConfirmed) return;
                 $.post(`/unlike-product/` + productId, function(response) {
                     if (response.status === 'success') {
                         row.fadeOut(300, function() {
@@ -417,9 +425,9 @@
                         });
                     }
                 }).fail(function() {
-                    alert('Something went wrong. Please try again.');
+                    Swal.fire({ icon: 'error', title: 'Could not remove item', text: 'Something went wrong. Please try again.' });
                 });
-            }
+            });
         });
     });
 </script>

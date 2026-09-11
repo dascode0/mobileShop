@@ -35,7 +35,7 @@
                                 <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-outline-primary">
                                     <i class="fa-solid fa-eye me-1"></i>View
                                 </a>
-                                <form action="{{ route('users.delete', $user) }}" method="POST" onsubmit="return confirm('Delete this user and all related data?');">
+                                <form action="{{ route('users.delete', $user) }}" method="POST" class="admin-delete-form" data-confirm-message="This user and all related data will be permanently deleted.">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger">
