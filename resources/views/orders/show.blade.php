@@ -67,7 +67,7 @@
                 <div class="card-header bg-dark text-white">Order Status</div>
                 <div class="card-body">
                     <p class="mb-2">Payment method: <span class="text-uppercase">{{ $order->payment_method }}</span></p>
-                    <p class="mb-2">Placed on: {{ $order->created_at->format('d M Y, h:i A') }}</p>
+                    <p class="mb-2">Placed on: {{ $order->created_at->utc()->timezone('Asia/Kolkata')->format('d M Y, h:i A') }}</p>
                     <label class="form-label">Status</label>
                     <select class="form-select order-status-select" data-order-id="{{ $order->id }}">
                         @foreach(['pending','confirmed','processing','shipped','delivered','cancelled'] as $status)

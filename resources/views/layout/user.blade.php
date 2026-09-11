@@ -45,7 +45,16 @@
                 <div class="nav-help d-none d-xxl-flex"><i class="ri-phone-fill"></i><span>Need help?<strong>08069856101</strong></span></div>
                 <ul class="header-actions mb-0">
                     @if (session('user_id'))
-                        <li><a href="{{ route('account') }}" aria-label="My account"><i class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Account</span></a></li>
+                        <li><a href="{{ route('account') }}" aria-label="My account">
+                            <span class="nav-account-icon">
+                                @if (Auth::user() && Auth::user()->profile_image)
+                                    <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="{{ Auth::user()->name }} profile photo">
+                                @else
+                                    <i class="fa-solid fa-user"></i>
+                                @endif
+                            </span>
+                            <span class="d-none d-lg-inline">Account</span>
+                        </a></li>
                     @else
                         <li><button type="button" id="signup-btn" aria-label="Log in or register"><i class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Sign in</span></button></li>
                     @endif

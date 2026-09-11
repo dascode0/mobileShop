@@ -94,7 +94,7 @@
                             @endforeach
                         </select>
                     </td>
-                    <td class="small">{{ $order->created_at->format('d M Y') }}</td>
+                    <td class="small">{{ $order->created_at->utc()->timezone('Asia/Kolkata')->format('d M Y') }}</td>
                     <td><a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-outline-dark">View</a></td>
                 </tr>
                 @empty

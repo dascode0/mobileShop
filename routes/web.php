@@ -26,6 +26,10 @@ Route::get('/login', function () {
     return redirect()->route('home');
 })->name('login');
 Route::get('/account', [AuthenticationController::class, 'account'])->middleware('auth')->name('account');
+Route::post('/account/profile-image', [AuthenticationController::class, 'updateProfileImage'])->middleware('auth')->name('account.profile-image.update');
+Route::delete('/account/profile-image', [AuthenticationController::class, 'deleteProfileImage'])->middleware('auth')->name('account.profile-image.delete');
+Route::patch('/account/orders/{order}/cancel', [AuthenticationController::class, 'cancelOrder'])->middleware('auth')->name('account.orders.cancel');
+Route::delete('/account/orders/{order}', [AuthenticationController::class, 'deleteOrder'])->middleware('auth')->name('account.orders.delete');
 Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');
 
 Route::get('/admin', function () {

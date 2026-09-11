@@ -10,7 +10,20 @@
     <h1 class="col-12"><i class="fa-solid fa-user"></i> My Account</h1>
     <div class="main_content row mt-0">
         <div class="main_left col-lg-3 col-12 mt-4">
-            <i class="fa-solid fa-circle-user user-logo"></i>
+            <div class="profile-photo-wrap">
+                @if($user->profile_image)
+                    <img src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }} profile photo" class="profile-photo" id="profile-photo">
+                @else
+                    <i class="fa-solid fa-circle-user user-logo" id="profile-photo"></i>
+                @endif
+                <button type="button" class="profile-photo-edit" id="profile-photo-edit" aria-label="Update profile photo">
+                    <i class="fa-solid fa-camera"></i>
+                </button>
+            </div>
+            <input type="file" id="profile-image-input" accept="image/jpeg,image/png,image/webp" hidden>
+            @if($user->profile_image)
+                <button type="button" class="profile-photo-delete" id="profile-photo-delete">Remove photo</button>
+            @endif
             <h3 class="mb-0">{{ $user->name }}</h3>
             <p class="fs-5 text-secondary">{{ $user->email }}</p>
             <ul>
@@ -68,7 +81,7 @@
                     <div class="order-card-header">
                         <div>
                             <strong>Order #{{ $latest->order_number }}</strong>
-                            <div class="text-secondary small">Placed on {{ $latest->created_at->format('d M Y, h:i A') }}</div>
+                            <div class="text-secondary small">Placed on {{ $latest->created_at->utc()->timezone('Asia/Kolkata')->format('d M Y, h:i A') }}</div>
                         </div>
                         <span class="status-badge status-{{ $latest->status }}">{{ ucfirst($latest->status) }}</span>
                     </div>
@@ -92,15 +105,29 @@
 
                 @if($orders->count() > 0)
                     @foreach($orders as $order)
-                    <div class="order-card {{ $highlightOrder && (string) $order->id === (string) $highlightOrder ? 'order-card-highlight' : '' }}">
+                    @php
+                        $canCancel = in_array($order->status, ['pending', 'confirmed', 'processing'], true);
+                        $canDelete = in_array($order->status, ['delivered', 'cancelled'], true);
+                    @endphp
+                    <article class="order-card {{ $highlightOrder && (string) $order->id === (string) $highlightOrder ? 'order-card-highlight' : '' }}" data-order-id="{{ $order->id }}">
                         <div class="order-card-header">
-                            <div>
+                            <div class="order-summary-main">
                                 <strong>Order #{{ $order->order_number }}</strong>
-                                <div class="text-secondary small">Placed on {{ $order->created_at->format('d M Y, h:i A') }}</div>
+                                <div class="order-summary-meta">
+                                    <span>{{ $order->orderItems->count() }} item(s)</span>
+                                    <span>₹{{ number_format($order->total, 2) }}</span>
+                                    <span>{{ $order->created_at->utc()->timezone('Asia/Kolkata')->format('d M Y, h:i A') }}</span>
+                                </div>
                             </div>
-                            <span class="status-badge status-{{ $order->status }}">{{ ucfirst($order->status) }}</span>
+                            <div class="order-summary-actions">
+                                <span class="status-badge status-{{ $order->status }}">{{ ucfirst($order->status) }}</span>
+                                <button type="button" class="order-toggle" aria-expanded="false" aria-controls="order-details-{{ $order->id }}">
+                                    <span class="visually-hidden">Show order details</span>
+                                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="order-card-body">
+                        <div class="order-card-body order-details" id="order-details-{{ $order->id }}" hidden>
                             <div class="order-items-mini">
                                 @foreach($order->orderItems as $item)
                                 <div class="order-item-mini">
@@ -137,8 +164,21 @@
                             <div class="text-secondary small mt-2">
                                 Payment method: <span class="text-uppercase">{{ $order->payment_method }}</span>
                             </div>
+
+                            <div class="order-actions mt-3">
+                                @if($canCancel)
+                                <button type="button" class="btn btn-outline-danger btn-sm order-cancel-btn">
+                                    <i class="fa-solid fa-ban me-1"></i>Cancel order
+                                </button>
+                                @endif
+                                @if($canDelete)
+                                <button type="button" class="btn btn-outline-secondary btn-sm order-delete-btn">
+                                    <i class="fa-solid fa-trash me-1"></i>Delete history
+                                </button>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    </article>
                     @endforeach
                 @else
                 <div class="empty-state">
@@ -263,6 +303,96 @@
 document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+    // ---- Profile photo ----
+    const profileInput = document.getElementById('profile-image-input');
+    const profileEdit = document.getElementById('profile-photo-edit');
+    const profileDelete = document.getElementById('profile-photo-delete');
+    const profileWrap = document.querySelector('.profile-photo-wrap');
+
+    if (profileEdit && profileInput) {
+        profileEdit.addEventListener('click', () => profileInput.click());
+        profileInput.addEventListener('change', async function () {
+            if (!this.files.length) return;
+
+            const formData = new FormData();
+            formData.append('profile_image', this.files[0]);
+            profileEdit.disabled = true;
+
+            try {
+                const response = await fetch('{{ route('account.profile-image.update') }}', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
+                    body: formData
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || 'Unable to update profile photo.');
+
+                let photo = document.getElementById('profile-photo');
+                if (photo.tagName === 'I') {
+                    photo = document.createElement('img');
+                    photo.id = 'profile-photo';
+                    photo.className = 'profile-photo';
+                    photo.alt = '{{ $user->name }} profile photo';
+                    profileWrap.insertBefore(photo, profileEdit);
+                    document.querySelector('.user-logo')?.remove();
+                }
+                photo.src = result.image_url + '?v=' + Date.now();
+
+                if (!document.getElementById('profile-photo-delete')) {
+                    const removeButton = document.createElement('button');
+                    removeButton.type = 'button';
+                    removeButton.id = 'profile-photo-delete';
+                    removeButton.className = 'profile-photo-delete';
+                    removeButton.textContent = 'Remove photo';
+                    profileWrap.parentNode.insertBefore(removeButton, profileWrap.nextSibling);
+                    bindProfileDelete(removeButton);
+                }
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Profile photo updated', showConfirmButton: false, timer: 2500 });
+            } catch (error) {
+                Swal.fire({ icon: 'error', title: 'Could not update photo', text: error.message });
+            } finally {
+                profileEdit.disabled = false;
+                this.value = '';
+            }
+        });
+    }
+
+    function bindProfileDelete(button) {
+        button.addEventListener('click', async function () {
+            const confirmed = await Swal.fire({
+                icon: 'warning',
+                title: 'Remove profile photo?',
+                showCancelButton: true,
+                confirmButtonText: 'Remove',
+                confirmButtonColor: '#dc3545'
+            });
+            if (!confirmed.isConfirmed) return;
+
+            button.disabled = true;
+            try {
+                const response = await fetch('{{ route('account.profile-image.delete') }}', {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' }
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || 'Unable to remove profile photo.');
+
+                const photo = document.getElementById('profile-photo');
+                const icon = document.createElement('i');
+                icon.id = 'profile-photo';
+                icon.className = 'fa-solid fa-circle-user user-logo';
+                photo.replaceWith(icon);
+                button.remove();
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Default profile icon restored', showConfirmButton: false, timer: 2500 });
+            } catch (error) {
+                button.disabled = false;
+                Swal.fire({ icon: 'error', title: 'Could not remove photo', text: error.message });
+            }
+        });
+    }
+
+    if (profileDelete) bindProfileDelete(profileDelete);
+
     // ---- Tab switching ----
     function showTab(tab) {
         document.querySelectorAll('.account-tab-panel').forEach(p => p.style.display = 'none');
@@ -286,6 +416,91 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const initialTab = "{{ in_array($activeTab, ['dashboard','orders','address','account']) ? $activeTab : 'dashboard' }}";
     showTab(initialTab);
+
+    // ---- Order details and order actions ----
+    document.querySelectorAll('.order-toggle').forEach(function (button) {
+        button.addEventListener('click', function () {
+            const card = button.closest('.order-card');
+            const details = document.getElementById(button.getAttribute('aria-controls'));
+            const expanded = button.getAttribute('aria-expanded') === 'true';
+
+            button.setAttribute('aria-expanded', String(!expanded));
+            details.hidden = expanded;
+            card.classList.toggle('is-expanded', !expanded);
+        });
+    });
+
+    async function updateOrder(orderId, method, actionButton) {
+        const response = await fetch(`/account/orders/${orderId}${method === 'PATCH' ? '/cancel' : ''}`, {
+            method: method,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            }
+        });
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Unable to update this order.');
+        }
+
+        return result;
+    }
+
+    document.querySelectorAll('.order-cancel-btn').forEach(function (button) {
+        button.addEventListener('click', async function () {
+            const card = button.closest('.order-card');
+            const confirmed = await Swal.fire({
+                icon: 'warning',
+                title: 'Cancel this order?',
+                text: 'This action cannot be undone.',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, cancel it',
+                confirmButtonColor: '#dc3545'
+            });
+
+            if (!confirmed.isConfirmed) return;
+
+            button.disabled = true;
+            try {
+                await updateOrder(card.dataset.orderId, 'PATCH', button);
+                const badge = card.querySelector('.status-badge');
+                badge.textContent = 'Cancelled';
+                badge.className = 'status-badge status-cancelled';
+                button.remove();
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Order cancelled', showConfirmButton: false, timer: 2500 });
+            } catch (error) {
+                button.disabled = false;
+                Swal.fire({ icon: 'error', title: 'Could not cancel order', text: error.message });
+            }
+        });
+    });
+
+    document.querySelectorAll('.order-delete-btn').forEach(function (button) {
+        button.addEventListener('click', async function () {
+            const card = button.closest('.order-card');
+            const confirmed = await Swal.fire({
+                icon: 'warning',
+                title: 'Delete order history?',
+                text: 'The order will be permanently removed from your account.',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it',
+                confirmButtonColor: '#dc3545'
+            });
+
+            if (!confirmed.isConfirmed) return;
+
+            button.disabled = true;
+            try {
+                await updateOrder(card.dataset.orderId, 'DELETE', button);
+                card.remove();
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Order history deleted', showConfirmButton: false, timer: 2500 });
+            } catch (error) {
+                button.disabled = false;
+                Swal.fire({ icon: 'error', title: 'Could not delete order', text: error.message });
+            }
+        });
+    });
 
     @if($highlightOrder)
     Swal.fire({

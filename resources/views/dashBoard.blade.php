@@ -63,7 +63,7 @@
                             <tr>
                                 <td>{{ $order->order_number }}</td>
                                 <td>{{ $order->user->name ?? 'Deleted user' }}</td>
-                                <td>{{ $order->created_at->format('d M Y') }}</td>
+                                <td>{{ $order->created_at->utc()->timezone('Asia/Kolkata')->format('d M Y') }}</td>
                                 <td>₹{{ number_format($order->total, 2) }}</td>
                                 <td><span class="badge text-bg-secondary text-capitalize">{{ $order->status }}</span></td>
                             </tr>

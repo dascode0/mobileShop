@@ -11,6 +11,8 @@ use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class AuthenticationController extends Controller
@@ -76,6 +78,81 @@ class AuthenticationController extends Controller
             'activeTab' => $activeTab,
             'highlightOrder' => $highlightOrder,
         ]);
+    }
+
+    public function cancelOrder(Order $order)
+    {
+        abort_unless($order->user_id === Auth::id(), 403);
+
+        if (!in_array($order->status, ['pending', 'confirmed', 'processing'], true)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This order can no longer be cancelled.',
+            ], 422);
+        }
+
+        $order->update(['status' => 'cancelled']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order cancelled successfully.',
+            'status' => $order->status,
+        ]);
+    }
+
+    public function deleteOrder(Order $order)
+    {
+        abort_unless($order->user_id === Auth::id(), 403);
+
+        if (!in_array($order->status, ['delivered', 'cancelled'], true)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only delivered or cancelled orders can be removed from history.',
+            ], 422);
+        }
+
+        DB::transaction(function () use ($order) {
+            $order->orderItems()->delete();
+            $order->delete();
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order removed from your order history.',
+        ]);
+    }
+
+    public function updateProfileImage(Request $request)
+    {
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $user = Auth::user();
+        if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+            Storage::disk('public')->delete($user->profile_image);
+        }
+
+        $user->profile_image = $request->file('profile_image')->store('profile-images', 'public');
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'image_url' => asset('storage/' . $user->profile_image),
+        ]);
+    }
+
+    public function deleteProfileImage()
+    {
+        $user = Auth::user();
+        if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+            Storage::disk('public')->delete($user->profile_image);
+        }
+
+        $user->profile_image = null;
+        $user->save();
+
+        return response()->json(['success' => true]);
     }
     public function logout(Request $request)
     {
