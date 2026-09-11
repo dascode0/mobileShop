@@ -114,6 +114,14 @@ class AddressController extends Controller
     public function destroy($id)
     {
         $address = Address::where('user_id', Auth::id())->findOrFail($id);
+
+        if ($address->orders()->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This address is linked to an existing order and cannot be deleted. You can still add a new address for future orders.'
+            ], 422);
+        }
+
         $address->delete();
 
         return response()->json([

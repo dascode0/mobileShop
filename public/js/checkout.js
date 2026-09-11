@@ -620,7 +620,7 @@ async function deleteAddress(addressId) {
                     showNotification('Address deleted successfully', 'success');
                 }
             } else {
-                showNotification('Failed to delete address', 'error');
+                showNotification(result.message || 'Failed to delete address', 'error');
             }
         } catch (error) {
             console.error('Error deleting address:', error);
@@ -695,12 +695,13 @@ async function placeOrder() {
         const result = await response.json();
         
         if (result.success) {
-            showNotification('Order placed successfully!', 'success');
-            
+            showNotification(`Order placed successfully! Your order ID is ${result.order_number}.`, 'success');
+
             setTimeout(() => {
-                // Redirect to home or order confirmation page
-                window.location.href = '/home';
-            }, 2000);
+                // Send the customer straight to their Orders tab, with this
+                // order highlighted, so the order ID is right there for them.
+                window.location.href = `/account?tab=orders&order=${result.order_id}`;
+            }, 1800);
         } else {
             showNotification(result.message || 'Failed to place order', 'error');
         }

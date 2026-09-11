@@ -342,7 +342,7 @@
                         </div>
                     </div>
 
-                    <a href="#" class="btn-checkout">
+                    <a href="{{ route('checkout.index') }}" class="btn-checkout">
                         <i class="fa-solid fa-credit-card me-2"></i>Proceed to Checkout
                     </a>
 

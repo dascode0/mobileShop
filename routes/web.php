@@ -10,6 +10,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 Route::get('/', [AuthenticationController::class, 'home'])->name('home');
 
@@ -19,10 +20,13 @@ Route::get('/navbar', function () {
 Route::post('/register', [AuthenticationController::class, 'register'])->name('registerSave');
 
 Route::post('/login', [AuthenticationController::class, 'login'])->name('loginSave');
+// Named 'login' so Laravel's default auth-middleware redirect has somewhere to go
+// for guests who hit a protected customer page instead of throwing a routing error.
+Route::get('/login', function () {
+    return redirect()->route('home');
+})->name('login');
 Route::get('/account', [AuthenticationController::class, 'account'])->middleware('auth')->name('account');
 Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');
-
-Route::get('/dashboard', [AuthenticationController::class, 'dashboard'])->name('dashboard');
 
 Route::get('/admin', function () {
     return view('admin-login');
@@ -31,29 +35,38 @@ Route::get('/admin', function () {
 Route::post('admin_login', [AuthenticationController::class, 'adminLogin'])->name('admin.login.save');
 Route::post('admin_register', [AuthenticationController::class, 'adminRegister'])->name('admin.register.save');
 Route::get('admin_logout', [AuthenticationController::class, 'adminLogout'])->name('admin.logout');
-Route::get('/users', [AuthenticationController::class, 'users'])->name('users');
 
-// Category Routes *****************************************************************************
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-Route::get('/category-add', [CategoryController::class, 'catagory_add'])->name('category.add');
-Route::post('category-save', [CategoryController::class, 'create'])->name('category.save');
-Route::get('/category-edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-Route::post('/category-update/{id}', [CategoryController::class, 'update'])->name('category.update');
-Route::get('/category-delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+// Admin-only Routes ***************************************************************************
+// Everything in this group requires a logged-in user with is_admin = true.
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [AuthenticationController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users', [AuthenticationController::class, 'users'])->name('users');
 
+    // Category Routes
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/category-add', [CategoryController::class, 'catagory_add'])->name('category.add');
+    Route::post('category-save', [CategoryController::class, 'create'])->name('category.save');
+    Route::get('/category-edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::post('/category-update/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::get('/category-delete/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 
-// End of Category Routes *********************************************************************
+    // Product management Routes (product-show below stays public for customers)
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/product-add', [ProductController::class, 'create'])->name('product.add');
+    Route::post('/product-save', [ProductController::class, 'store'])->name('product.save');
+    Route::get('product-update/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::post('product-update/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::get('product-delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
 
-// Product Routes *****************************************************************************
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-Route::get('/product-add', [ProductController::class, 'create'])->name('product.add');
-Route::post('/product-save', [ProductController::class, 'store'])->name('product.save');
-Route::get('product-update/{id}', [ProductController::class, 'edit'])->name('product.edit');
-Route::post('product-update/{id}', [ProductController::class, 'update'])->name('product.update');
-Route::get('product-delete/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+    // Order management Routes
+    Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('/admin/orders/{id}', [AdminOrderController::class, 'show'])->name('admin.orders.show');
+    Route::post('/admin/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+});
+// End of Admin-only Routes ********************************************************************
+
+// product-show stays public — customers browse product pages without logging in
 Route::get('product-show/{id}', [ProductController::class, 'show'])->name('product.show');
-
-// End of Product Routes ***********************************************************************
 
 /*user routes start */
 

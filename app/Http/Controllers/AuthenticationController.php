@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\Address;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,13 +51,31 @@ class AuthenticationController extends Controller
 
         return redirect()->back()->withErrors(['error' => 'Invalid credentials. Please try again.']);
     }
-    public function account()
+    public function account(Request $request)
     {
         $user = Auth::user();
         if (!$user) {
             return redirect()->route('home')->withErrors(['error' => 'You must be logged in to view this page.']);
         }
-        return view('account', ['user' => $user]);
+
+        $orders = Order::with(['address', 'orderItems.product'])
+            ->where('user_id', $user->id)
+            ->latest()
+            ->get();
+
+        $addresses = Address::where('user_id', $user->id)->latest()->get();
+
+        // Allow deep-linking straight to a tab, e.g. /account?tab=orders
+        $activeTab = $request->query('tab', 'dashboard');
+        $highlightOrder = $request->query('order');
+
+        return view('account', [
+            'user' => $user,
+            'orders' => $orders,
+            'addresses' => $addresses,
+            'activeTab' => $activeTab,
+            'highlightOrder' => $highlightOrder,
+        ]);
     }
     public function logout(Request $request)
     {
@@ -71,12 +91,13 @@ class AuthenticationController extends Controller
     // dashboard method start to the admin panel
     public function dashboard()
     {
-        $user = Auth::user();
-        if (!$user) {
-            return redirect()->route('admin.login')->withErrors(['error' => 'You must be logged in to view this page.']);
-        }
-        $usercount = User::count(); // Get the total number of users
-        return view('dashboard', compact('usercount'));
+        $usercount = User::count();
+        $ordercount = Order::count();
+        $productcount = Product::count();
+        $revenue = (float) Order::whereNotIn('status', ['cancelled'])->sum('total');
+        $recentOrders = Order::with('user')->latest()->take(5)->get();
+
+        return view('dashboard', compact('usercount', 'ordercount', 'productcount', 'revenue', 'recentOrders'));
     }
 
     public function adminLogin(Request $request)
@@ -88,8 +109,7 @@ class AuthenticationController extends Controller
             $request->session()->put('user_id', $user->id);
             $request->session()->put('user_name', $user->name);
             $request->session()->put('user_email', $user->email);
-            $usercount = User::count(); // Get the total number of users
-            return view('dashboard', compact('usercount'));
+            return redirect()->route('dashboard');
         }
 
         return redirect()->back()->withErrors(['error' => 'Invalid credentials. Please try again.']);
@@ -113,8 +133,7 @@ class AuthenticationController extends Controller
         $request->session()->put('user_email', $user->email);
 
         if ($user) {
-            $usercount = User::count(); // Get the total number of users
-            return view('dashboard', compact('usercount'));
+            return redirect()->route('dashboard');
         }
         return redirect()->back()->withErrors(['error' => 'Registration failed. Please try again.']);
     }
