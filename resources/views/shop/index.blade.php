@@ -117,7 +117,7 @@
                         @endforeach
                     </div>
 
-                    <div class="d-flex justify-content-center mt-4">
+                    <div class="shop-pagination mt-4" aria-label="Shop pagination">
                         {{ $products->links() }}
                     </div>
                 @else

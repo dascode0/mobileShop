@@ -49,7 +49,7 @@
                     @else
                         <li><button type="button" id="signup-btn" aria-label="Log in or register"><i class="fa-solid fa-user"></i><span class="d-none d-lg-inline">Sign in</span></button></li>
                     @endif
-                    <li><a href="{{ route('wishlist.index') }}" aria-label="Favorites"><span class="action-icon"><i class="fa-solid fa-heart"></i>@if($wishlistCount > 0)<span class="nav-count">{{ $wishlistCount > 99 ? '99+' : $wishlistCount }}</span>@endif</span><span class="d-none d-lg-inline">Favorites</span></a></li>
+                    <li><a href="{{ route('wishlist.index') }}" aria-label="Favorites"><span class="action-icon"><i class="fa-solid fa-heart"></i><span id="wishlist-count" class="nav-count" @if($wishlistCount === 0) hidden @endif>{{ $wishlistCount > 99 ? '99+' : $wishlistCount }}</span></span><span class="d-none d-lg-inline">Favorites</span></a></li>
                     <li><a href="{{ route('cart.index') }}" aria-label="My cart"><span class="action-icon"><i class="ri-shopping-cart-fill"></i>@if($cartCount > 0)<span class="nav-count">{{ $cartCount > 99 ? '99+' : $cartCount }}</span>@endif</span><span class="d-none d-lg-inline">My cart</span></a></li>
                 </ul>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNavigation" aria-controls="primaryNavigation" aria-expanded="false" aria-label="Open menu"><span class="navbar-toggler-icon"></span></button>

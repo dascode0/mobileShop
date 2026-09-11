@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
 
 class WishlistController extends Controller
 {
@@ -25,30 +24,40 @@ class WishlistController extends Controller
     public function wishProduct($id)
     {
         if (!Auth::check()) {
-            return response()->json(['status' => 'error', 'message' => 'Please log in to add to wishlist'], 401);
+            return response()->json(['status' => 'unauthenticated', 'message' => 'Please log in to save favorites.'], 401);
         }
 
+        $product = Product::findOrFail($id);
         /** @var User $user */
         $user = Auth::user();
         
         // Check if product is already in wishlist
-        if ($user->wishlists()->where('product_id', $id)->exists()) {
-            return response()->json(['status' => 'info', 'message' => 'Product already in wishlist']);
+        if ($user->wishlists()->where('product_id', $product->id)->exists()) {
+            return response()->json(['status' => 'info', 'message' => 'This product is already in your favorites.']);
         }
         
-        $user->wishlists()->attach($id);
-        return response()->json(['status' => 'success', 'message' => 'Product added to wishlist']);
+        $user->wishlists()->attach($product->id);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product added to your favorites.',
+            'wishlistCount' => $user->wishlists()->count(),
+        ]);
     }
     
     public function unwishProduct($id)
     {
         if (!Auth::check()) {
-            return response()->json(['status' => 'error', 'message' => 'Please log in to remove from wishlist'], 401);
+            return response()->json(['status' => 'unauthenticated', 'message' => 'Please log in to manage favorites.'], 401);
         }
 
+        $product = Product::findOrFail($id);
         /** @var User $user */
         $user = Auth::user();
-        $user->wishlists()->detach($id);
-        return response()->json(['status' => 'success', 'message' => 'Product removed from wishlist']);
+        $user->wishlists()->detach($product->id);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product removed from your favorites.',
+            'wishlistCount' => $user->wishlists()->count(),
+        ]);
     }
 }
