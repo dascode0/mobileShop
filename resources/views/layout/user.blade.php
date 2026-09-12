@@ -42,7 +42,7 @@
         <nav class="navbar navbar-expand-xl navbar-dark top-nav" aria-label="Main navigation">
             <div class="container-fluid px-lg-4">
                 <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('img/logo-3.png') }}" alt="93Mobiles"></a>
-                <form class="nav-search d-none d-lg-flex" role="search"><label class="visually-hidden" for="searchBox">Search products</label><input class="form-control" type="search" placeholder="Search for Samsung" id="searchBox"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+                <form class="nav-search d-none d-lg-flex" role="search" method="GET" action="{{ route('shop.index') }}"><label class="visually-hidden" for="searchBox">Search products</label><input class="product-search-input form-control" type="search" name="search" placeholder="Search for Samsung" id="searchBox" autocomplete="off"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button><div class="search-suggestions" role="listbox"></div></form>
                 <div class="nav-help d-none d-xxl-flex"><i class="ri-phone-fill"></i><span>Need help?<strong>08069856101</strong></span></div>
                 <ul class="header-actions mb-0">
                     @if (session('user_id'))
@@ -59,7 +59,7 @@
                     data-bs-target="#primaryNavigation" aria-controls="primaryNavigation" aria-expanded="false"
                     aria-label="Open menu"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse mobile-navigation" id="primaryNavigation">
-                    <form class="nav-search nav-search--mobile d-lg-none" role="search"><label class="visually-hidden" for="mobileSearch">Search products</label><input class="form-control" type="search" placeholder="Search products" id="mobileSearch"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button></form>
+                    <form class="nav-search nav-search--mobile d-lg-none" role="search" method="GET" action="{{ route('shop.index') }}"><label class="visually-hidden" for="mobileSearch">Search products</label><input class="product-search-input form-control" type="search" name="search" placeholder="Search products" id="mobileSearch" autocomplete="off"><button class="btn" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button><div class="search-suggestions" role="listbox"></div></form>
                     <ul class="navbar-nav"><li><a href="{{ route('home') }}">Home</a></li><li><a href="{{ route('shop.index') }}">Shop all products</a></li><li><a href="{{ route('about.page') }}">Our story</a></li><li><a href="{{ route('news.page') }}">Hot news</a></li><li><a href="{{ route('contact.page') }}">Contact us</a></li></ul>
                 </div>
             </div>

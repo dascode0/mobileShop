@@ -1047,20 +1047,7 @@
                     </div>
                     <img src="{{ asset('storage/' . ($product->image ?? 'default.jpg')) }}"
                         alt="{{ $product->name ?? 'Product Image' }}" class="product-main-image">
-                    <div class="product-image-footer" aria-label="Product service benefits">
-                        <div class="product-image-footer-item">
-                            <i class="fa-solid fa-truck-fast"></i>
-                            <span>Fast delivery</span>
-                        </div>
-                        <div class="product-image-footer-item">
-                            <i class="fa-solid fa-shield-halved"></i>
-                            <span>1 year warranty</span>
-                        </div>
-                        <div class="product-image-footer-item">
-                            <i class="fa-solid fa-rotate-left"></i>
-                            <span>7 day returns</span>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
 
@@ -1108,47 +1095,19 @@
                             <span class="text-danger small">This product is not available right now. Please check again later.</span>
                         @endif
                     </div>
-
-                    <!-- Product Features -->
-                    <div class="product-features">
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-truck-fast"></i>
-                            </div>
-                            <div class="feature-text">Free Delivery</div>
-                            <div class="feature-value">2-3 Days</div>
+                    <div class="product-image-footer" aria-label="Product service benefits">
+                        <div class="product-image-footer-item">
+                            <i class="fa-solid fa-truck-fast"></i>
+                            <span>Fast delivery</span>
                         </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-shield-halved"></i>
-                            </div>
-                            <div class="feature-text">Warranty</div>
-                            <div class="feature-value">1 Year</div>
+                        <div class="product-image-footer-item">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>1 year warranty</span>
                         </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-rotate-left"></i>
-                            </div>
-                            <div class="feature-text">Return Policy</div>
-                            <div class="feature-value">7 Days</div>
+                        <div class="product-image-footer-item">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <span>7 day returns</span>
                         </div>
-                        <div class="feature-item">
-                            <div class="feature-icon">
-                                <i class="fa-solid fa-headset"></i>
-                            </div>
-                            <div class="feature-text">Support</div>
-                            <div class="feature-value">24/7</div>
-                        </div>
-                    </div>
-
-                    <!-- Product Summary -->
-                    <div class="product-summary">
-                        <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 1rem; font-size: 1.2rem;">
-                            <i class="fa-solid fa-star me-2" style="color: #00796B;"></i>Key Features
-                        </h3>
-                        <p style="color: #5a6c7d; line-height: 1.6; margin: 0;">
-                            {{ Str::limit($product->description ?? 'Premium mobile device with cutting-edge technology and elegant design.', 120) }}
-                        </p>
                     </div>
                 </div>
             </div>
